@@ -1,0 +1,70 @@
+
+% !TeX encoding = UTF-8
+% !TeX program = pdflatex
+% !TeX spellcheck = it_IT
+
+\documentclass[noexaminfo,oneside,binding=0.6cm]{sapthesis}
+
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage[style=numeric]{biblatex}
+\usepackage{csquotes}
+\usepackage{subcaption}
+\addbibresource{references.bib}
+\usepackage{amssymb}
+\usepackage{float}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{geometry}
+
+\hypersetup{pdftitle={Cambia il titolo},pdfauthor={Alessio Maiola}}
+
+
+\title{Cambia il titolo}
+\author{Alessio Maiola}
+\IDnumber{1933744}
+\course{Engineering in Computer Science}
+\courseorganizer{Facoltà di Ingegneria dell'Informazione, Informatica e Statistica}
+\AcademicYear{2024/2025}
+\advisor{Prof. Aristidis Anagnostopoulos}
+\authoremail{maiola.1933744@studenti.uniroma1.it}
+\copyyear{2025}
+\thesistype{Master Thesis}
+
+\begin{document}
+
+\frontmatter
+\maketitle
+\dedication{Dedicated to \\ Luigi Ricci}
+
+
+\begin{acknowledgments}
+
+\end{acknowledgments}
+
+
+\begin{abstract}
+
+\end{abstract}
+
+\tableofcontents
+
+\mainmatter
+
+\include{history}
+
+
+\backmatter
+\cleardoublepage
+\phantomsection % Give this command only if hyperref is loaded
+\addcontentsline{toc}{chapter}{\bibname}
+% Here put the code for the bibliography. You can use BibTeX or
+% the BibLaTeX package or the simple environment thebibliography.
+
+\printbibliography
+
+\end{document}
