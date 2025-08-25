@@ -1,18 +1,16 @@
 
 % !TeX encoding = UTF-8
-% !TeX program = pdflatex
+% !TeX program = xelatex
 % !TeX spellcheck = it_IT
 
 \documentclass[noexaminfo,oneside,binding=0.6cm]{sapthesis}
 
 
-\usepackage[english]{babel}
-\usepackage[utf8]{inputenc}
+\usepackage{polyglossia}
 \usepackage{hyperref}
 \usepackage[style=numeric]{biblatex}
 \usepackage{csquotes}
 \usepackage{subcaption}
-\addbibresource{references.bib}
 \usepackage{amssymb}
 \usepackage{float}
 \usepackage{tabularx}
@@ -20,6 +18,16 @@
 \usepackage{booktabs}
 \usepackage{multirow}
 \usepackage{geometry}
+\usepackage{linearb}
+\usepackage{cypriot}
+
+\setmainlanguage{english}
+\setotherlanguage[variant=ancient]{greek}
+\setotherlanguage{italian}
+\newfontfamily\greekfont{Times New Roman}[Script=Greek]
+
+\addbibresource{references.bib}
+
 
 \hypersetup{pdftitle={Cambia il titolo},pdfauthor={Alessio Maiola}}
 
