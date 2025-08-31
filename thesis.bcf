@@ -2388,6 +2388,16 @@
     <bcf:citekey order="14" intorder="1">chad-ch4</bcf:citekey>
     <bcf:citekey order="15" intorder="1">chad-ch5</bcf:citekey>
     <bcf:citekey order="16" intorder="1">chad-ch6</bcf:citekey>
+    <bcf:citekey order="17" intorder="1">luo</bcf:citekey>
+    <bcf:citekey order="18" intorder="1">luo</bcf:citekey>
+    <bcf:citekey order="19" intorder="1">tselentis</bcf:citekey>
+    <bcf:citekey order="20" intorder="1">chadwick-notes</bcf:citekey>
+    <bcf:citekey order="21" intorder="1">prompting-programming</bcf:citekey>
+    <bcf:citekey order="22" intorder="1">cot</bcf:citekey>
+    <bcf:citekey order="23" intorder="1">uppercase-is-all-you-need</bcf:citekey>
+    <bcf:citekey order="24" intorder="1">luo</bcf:citekey>
+    <bcf:citekey order="25" intorder="1">tselentis</bcf:citekey>
+    <bcf:citekey order="26" intorder="1">tselentis</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="nty">

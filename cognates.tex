@@ -1,0 +1,472 @@
+\chapter{The cognate matching task}
+As explained in section~\ref{sec:decipherment}, the decipherment of Linear B required a collective effort that involved several scholars and extended over multiple decades.
+
+The main difficulties in any decipherment process concerning ancient languages arise from two factors: the absence of parallel texts that could guide the interpretation, and the extreme scarcity of surviving documents.
+Even for domain experts, decipherment therefore demands encyclopedic linguistic and historical knowledge, combined with an enormous amount of manual work that is often prohibitive in terms of time and resources. 
+Moreover, the challenges encountered during the decipherment of one language are rarely reusable for others, since much of the required work and insights are closely tied to the specific features of that language and cannot be easily generalized \cite{luo}. 
+For example, the rules mentioned at the end of section~\ref{subsec:ventris-chadwick} are highly specific to the context of Linear B and its unique characteristics, and do not even apply to closely related scripts, such as Cypriot or possibly Linear A (for which no certainty exists, as the language remains undeciphered).  
+
+For these reasons, the introduction of computational methods and machine learning techniques has the potential to provide crucial assistance.
+Nevertheless, the central obstacle remains the limited amount of training data.
+This scarcity of examples makes it essential to design models that are able to learn effectively from small datasets and to generalize from minimal evidence.
+
+In this respect, it is important to note that not all machine learning architectures are equally suitable for such low-resource conditions.  
+Transformers, for example, are a class of neural networks that have achieved remarkable results in modern natural language processing tasks, such as machine translation and text generation.  
+However, their success is strongly dependent on access to very large training corpora.
+In the absence of such data, as is the case for ancient scripts, the application of transformers becomes impractical.
+This explains why alternative architectures, which are better suited to scenarios where training data is scarce, are currently preferred in the computational study of ancient languages.
+
+\section{Identifying Cognates}
+Cognates are words in different languages that share a common etymological origin.  
+Identifying cognates is a crucial task in historical linguistics, as it allows researchers to trace the evolution of languages and to understand their relationships.  
+In the case of Linear B, the identification of cognates provided valuable correspondences between the syllabic script and the phonetic representations of Ancient Greek, which proved instrumental in the decipherment process.  
+Cognate matching was indeed a key aspect of Ventris' work, as he relied on clearly identifiable cognates to assign phonetic values to Linear B signs.  
+However, the task of identifying cognates is not always straightforward, since it requires a deep understanding of the historical and linguistic context of the languages involved.  
+In addition, several phonological transformations had taken place over time, including the differentiation of aspirated consonants and the loss of certain sounds once present in Linear B, such as the digamma ({\textgreek{ϝ}}) and the labio-velar consonant \textit{q}.  
+
+Below are some examples of cognates identified between Linear B and Ancient Greek:  
+
+\begin{itemize}  
+    \item \textlinb{\Ba\Be\Bti\Bto} (a-e-ti-to) $\rightarrow$ \textgreek{ἀέθιστος}, \textgreek{ἐθίζω} \\  
+    This example shows how a Linear B sequence corresponds directly to a recognizable Greek adjective and verb.  
+
+    \item \textlinb{\Ba\Bdi\Bnwa\Bta} (a-di-nwa-ta) $\rightarrow$ \textgreek{Ἀδινϝᾶτας} \\  
+    An instance where the Linear B syllabogram "nwa" reflects the presence of the digamma.  
+
+    \item \textlinb{\Be\Bma\Baii} (e-ma-ha) $\rightarrow$ \textgreek{Ἑρμᾶς}, \textgreek{Ἑρμαῖ}, \textgreek{Ἑρμαίας} \\  
+    Illustrates a clear lexical link to Greek terms related to Hermes.  
+
+    \item \textlinb{\Bko\Bno\Bso} (ko-no-so) $\rightarrow$ \textgreek{Κνωσός}\\  
+    A straightforward toponym, the name of the main Minoan palace site.  
+
+    \item \textlinb{\Bwo\Bno\Bqe\Bwa} (wo-no-qe-wa) $\rightarrow$ \textgreek{Φονοκέϝας}, \textgreek{Φονοκέϝαν} \\  
+    Preserves traces of the digamma and labio-velar consonants.  
+
+    \item \textlinb{\Bwo\Bro\Bki\Bjo\Bne\Bjo} (wo-ro-ki-jo-ne-jo) $\rightarrow$ \textgreek{ϝοργιονείον}, \textgreek{Ὀργιονεῖος}, \textgreek{Ὀργίωνες} \\  
+    A more complex example, relating to anthroponyms and associations.  
+
+    \item \textlinb{\Bqi\Bsi\Bpe\Be} (qi-si-pe-e) $\rightarrow$ \textgreek{ξίφεις}, \textgreek{ξίφη}, \textgreek{ξίφεα} \\  
+    Reflects the Linear B representation of the Greek word for "sword."  
+
+    \item \textlinb{\Bre\Bu\Bko\Bto\Bro} (re-u-ko-to-ro) $\rightarrow$ \textgreek{Λεῦκτρον}, \textgreek{Λεῦκτροι} \\  
+    A toponym, attested both in Linear B and later Greek sources.  
+
+    \item \textlinb{\Bqo\Bu\Bqo\Bta} (qo-u-qo-ta) $\rightarrow$ \textgreek{Βουβώτας} \\  
+    Demonstrates the phonetic evolution of labio-velar sounds.  
+
+    \item \textlinb{\Bqe\Bqi\Bno\Bme\Bna} (qe-qi-no-me-na) $\rightarrow$ \textgreek{γεγινώμενα}, \textgreek{γιγνόμενα} \\  
+    A verbal form that shows continuity in Greek morphology.  
+
+    \item \textlinb{\Bpo\Bro\Bwi\Bto\Bjo} (po-ro-wi-to-jo) $\rightarrow$ \textgreek{πλωϝιστοῖο} \\  
+    Example of a genitive form with preservation of the digamma.  
+
+    \item \textlinb{\Bpo\Bti\Bpi} (po-ti-pi) $\rightarrow$ \textgreek{Πόρτις}, \textgreek{Πόρτιφι} \\  
+    Reflects a proper name with different Greek attestations.  
+
+    \item \textlinb{\Ba\Bri\Bqa} (a-ri-qa) $\rightarrow$ \textgreek{Ἄρισβας} \\  
+    Example of an anthroponym preserving older consonantal values.  
+
+    \item \textlinb{\Bko\Bno} (ko-no) $\rightarrow$ \textgreek{Σκοῖνος} \\  
+    Shows the addition of a consonant in Ancient Greek. 
+\end{itemize}  
+
+\section{Datasets}
+In this section, the process of gathering and preparing the datasets used in this study is described.  
+It is worth noting that I made several choices in order to create a clean and consistent dataset.  
+The main choices are the following:
+
+\begin{itemize}
+    \item All diacritics, accents, and breathings were removed from Ancient Greek forms, resulting in a simplified text. For example \textgreek{ἀέθιστος} is represented as \textgreek{αεθιστος}.
+
+    \item All instances of uppercase letters were converted to lowercase in order to normalize the data. For instance \textgreek{Κνωσός} is represented as \textgreek{κνωσος}.
+    Note also that Linear B does not distinguish uppercase and lowercase.
+    
+    \item All instances of punctuation were removed.
+    
+    \item Linear B words were represented using their Latinized transcription.  
+    Therefore, the dataset contains the word \textlinb{\Bko\Bwo} as ko-wo instead of the original Linear B characters.
+
+    \item The instances of digamma were inserted in a suitable position also in the Greek form, despite their disappearance from Classical Greek.  
+    For example, the word \textgreek{κόρος} is represented as \textgreek{κορfος} in the dataset.
+    In some cases, the version without digamma is also included, as in \textgreek{κουρος}.
+
+    \item The only additional symbol employed, besides the standard Greek alphabet, is "h", used to represent the aspiration conveyed by the syllabogram \textlinb{\Baii} (ha).
+    For instance, \textlinb{\Ba\Bpi\Baii\Bro} (a-pi-ha-ro) is rendered as \textgreek{αμφιhαλος}.
+\end{itemize}
+
+The sources of all the data included in the final version of the dataset are the following:
+
+\begin{itemize}
+\item \textbf{Luo's dataset} \cite{luo}: a collection of cognates between Linear B and Ancient Greek, compiled by Jiaming Luo. It contains 919 Linear B words together with their proposed Ancient Greek correspondences.
+\item \textbf{Chris Tselentis' *Linear B Lexicon*} \cite{tselentis}: a lexicon comprising 1338 Linear B entries with Ancient Greek equivalents. A substantial portion of these entries overlap with Luo's dataset.
+\item \textbf{Ventris and Chadwick's Vocabulary} \cite{chadwick-notes}: a digitized compilation based on the original notes and lexical work of Michael Ventris and John Chadwick, later supplemented with commentary by other scholars. The resource, available as a CSV file at \url{https://linear-b.kinezika.com/lexicon.html}, comprises 2747 unique words.
+It is organized as a vocabulary, offering definitions and interpretative remarks on the terms, and thus represents an extended digital derivative of their foundational work.
+\end{itemize}
+
+\subsection{Prompt engineering}
+Some tasks were automated using prompt engineering techniques with Gemini~2.0~Flash and Gemini~2.5~Flash, which proved effective for text processing and data manipulation. Whenever these techniques are employed, I explicitly indicate their use and summarize the prompt instructions that were critical to the task.
+In general, the prompts followed these principles:
+
+\begin{itemize}
+\item \textbf{Clarity and specificity:} Clear, unambiguous instructions to reduce variance and align outputs with task requirements \cite{prompting-programming}.
+
+\item \textbf{Iterative refinement:} Prompts were refined based on model outputs to improve quality across iterations.
+
+\item \textbf{Contextualization:} Task-relevant context (e.g., field definitions, examples) was included to guide disambiguation.
+
+\item \textbf{Structured reasoning:} Prompts encouraged stepwise reasoning for complex tasks (e.g., breaking a problem into sub-steps), leading to more coherent outputs \cite{cot}.
+
+\item \textbf{Structured formatting:} Outputs were requested in explicit schemas (XML/JSON, bullet/numbered lists) to ensure machine-readable, post-processable results.
+
+\item \textbf{Salience cues (including UPPERCASE for emphasis):} Key requirements were emphasized to prioritize the most important aspects and reduce omission errors \cite{uppercase-is-all-you-need}.
+\end{itemize}
+
+When necessary, I adjusted the model’s generation settings to favor determinism: the \texttt{temperature} was set low (e.g., 0.1--0.3) to reduce randomness and increase repeatability, and \texttt{top-k} was fixed at 1 (greedy selection).
+
+\subsection{Luo's Dataset}
+Luo's dataset is the one on which the creator of the NeuroDecipher model (introduced later) tested its performance.
+The model achieves excellent results on this dataset, reaching an accuracy of 84.7\% of cognates correctly matched \cite{luo}.
+
+However, the dataset is not without limitations. 
+The main issue I identified upon closer inspection is that some proposed Greek cognates are not attested in extant Ancient Greek sources, but rather tentative transliterations of Linear B forms or artificially modified versions of Greek correspondences.
+While this may artificially improve the cognate matching task, it does not reflect a realistic linguistic scenario and makes the dataset unsuitable for use in an automatic translation pipeline.
+A few illustrative examples are given below:
+
+\begin{itemize}
+\item \textlinb{\Bqo\Bo} (qo-o) is correctly associated with \textgreek{βους}, as also confirmed by Tselentis' lexicon \cite{tselentis}. However, the dataset additionally lists \textgreek{κfοος}, which does not correspond to any attested Ancient Greek form.
+\item \textlinb{\Bto\Bo} (to-no) is linked to \textgreek{θρονος}, likewise confirmed by Tselentis' lexicon \cite{tselentis}, but the dataset also includes \textgreek{θορνος}, an unattested form that results from an unjustified inversion of letters.
+This error extends to \textlinb{\Bto\Bro\Bno\Bwo\Bko} (to-ro-no-wo-ko), where the listed cognate is \textgreek{θορνοfοργος}. I corrected this instead to \textgreek{θρονοfοργος} and \textgreek{θρονοfεργος}, both plausible formations obtained by combining \textgreek{θρόνος} ("throne, chair") with the productive suffix derived from \textgreek{ἔργον} ("work, deed"). The resulting compound restores the original sense of the term as "chair-maker" or "craftsman of thrones."
+\item In several cases, the dataset conflates distinct gendered forms by grouping them under a single entry. For example, \textlinb{\Bne\Bwa} (ne-wa), corresponding to \textgreek{νεfα} or \textgreek{νεα}, feminine, and \textlinb{\Bne\Bwo} (ne-wo), corresponding to \textgreek{νεfος} or \textgreek{νεος}, masculine, were all grouped under \textlinb{\Bne\Bwa}, despite both variants being independently attested in the Linear B corpus.
+\end{itemize}
+
+The adjustments described above were applied to Luo's dataset in order to enhance its reliability and linguistic accuracy.
+This revised version was then used both to measure the performance of the NeuroDecipher model on a more realistic dataset and as the foundation for constructing the final comprehensive dataset, which also integrates additional material from Tselentis' Linear B Lexicon and from the digitized vocabulary of Ventris and Chadwick.
+The resulting revised dataset comprises 976 Linear B entries paired with their respective Ancient Greek correspondences.
+
+\subsection{Tselentis' Dataset}
+Tselentis' dataset represents a valuable resource for the study of Linear B, as it comprises a comprehensive lexicon of Linear B terms and their corresponding Ancient Greek forms.  
+It serves as a crucial reference point for validating and enriching the cognate pairs identified in Luo's dataset.  
+
+The main drawback of Tselentis' lexicon is that it was only available as a PDF document, which made it necessary to manually transcribe the entries into a more usable format.
+After using an online OCR tool to extract its content into a CSV file, followed by targeted cleaning, a structured file containing all the fields in the lexicon was obtained.
+
+Nevertheless, the data still required further processing to extract the Greek and Linear B forms in accordance with the normalization criteria outlined at the start of this section.
+Several parsing mistakes, along with inconsistencies in accents, diacritics, and formatting, had to be corrected to ensure accuracy and consistency.
+To streamline this process, Prompt Engineering techniques were employed with Gemini~2.0~Flash, guided by explicit processing directives.
+
+These techniques enabled the automated correction of recurrent errors and inconsistencies, significantly accelerating data preparation.
+The processed dataset was then reviewed manually to ensure its quality and reliability before integration into the final comprehensive dataset.
+
+For transparency and repeatability, I detail here the precise directives provided to Gemini for dataset processing.
+
+\bigskip
+\noindent\textbf{PROCESSING RULES FOR LINEAR B TO GREEK COGNATES:}
+
+\begin{enumerate}[label=\textbf{\arabic*.}, leftmargin=2.5em]
+\setcounter{enumi}{-1}
+
+\item CRITICAL: DO NOT MAKE ANY MODIFICATION TO GREEK COGNATES OR LINEAR B SEQUENCES IF THE MODIFICATION IS NOT MENTIONED IN THE FOLLOWING RULES! DO NOT CHANGE THE INPUT IN ANY POSSIBLE WAY AND ONLY APPLY THE GIVEN MODIFICATION RULES! NO FANTASY JUST BLINDLY OBEY!
+
+\item SPLITTING MULTIPLE WORDS: When Linear B field contains multiple words separated by "/", create separate JSON objects for each word, matching with the corresponding Greek cognate in the same position.
+
+\item HANDLING PARENTHESES: For Linear B words with parenthetical elements like "po-ni-ke-(j)a", create two separate entries (one with and one without the parenthetical element, like "po-ni-ke-ja" and "po-ni-ke-a").
+
+\begin{enumerate}[label*=\textbf{\arabic*.}, leftmargin=2em]
+  \item HANDLING PARENTHESES FOR GREEK COGNATE: if a word is presented with optional greek characters with parenthetical elements like "\textgreek{αιξμά(ν)ς}", include both variants with and without the letter in parentheses.
+  \item HANDLING PARENTHESES FOR GREEK COGNATE: if a word is presented within parentheses, include it regardless, like "\textgreek{Αιθαλεύσι(Αιθαλεύς)}".
+\end{enumerate}
+
+\item MULTIPLE TRANSLATIONS: If a Linear B word has multiple possible Greek cognates, include all of them as an array within the same JSON object.
+
+\item REMOVING DIACRITICS: Remove all accents, breathing marks, and other diacritics from Greek cognates.
+
+\item HANDLING "ha" SIGN: When "ha" appears in Linear B, ensure the corresponding Greek cognate includes "h".
+
+\item DIGAMMA CONVERSION: Convert every instance of digamma "F" to lowercase "f" in Greek cognates.
+
+\item CRITICAL: ALLOWED CHARACTERS: Use ONLY these characters in Greek cognates: \textgreek{fhαβγδεζηθικλμνξοπρςστυφχψω}. DO NOT USE ANY OTHER CHARACTER FOR ANY REASON!
+
+\item DISALLOWED CHARACTERS: Drop cognates containing disallowed characters, but preserve valid cognates found within parentheses or other markers.
+
+\item IN SOME VERY RARE AND PARTICULAR CASES some cognates may be considered as DUBIOUS, IF AND ONLY IF THEY CONTAIN A LIKELY WRONG TRANSLITERATION AND A CORRECT MATCH IS ALREADY PRESENT. Put them in the "dubious" field, another optional array field in the JSON object.
+
+\item if white spaces are present between syllables separated by - in the linear b sequence, remove them.
+
+\item DO NOT USE PARENTHESES IN THE LINEAR B SEQUENCES OR IN THE GREEK COGNATE.
+\end{enumerate}
+
+Applying these directives reduced OCR noise and errors, preserving valid cognate pairs while preventing format drift that would hinder downstream parsing.
+These directives, together with a number of examples and some input and output definitions, allowed me to automate most of the manual work that the data needed in order to be ready to use.
+
+\subsection{Brute-Force Cognate Extraction}
+
+To enlarge the dataset, I implemented and applied a brute-force, syllabogram-aware matcher over a large Greek lexicon (composed by the Iliad and Odyssey).
+Greek forms were first normalized (diacritics removed, lowercased) and then latinized via a direct character map aligned to Linear B conventions (e.g., \textgreek{ξ} $\rightarrow$ \textit{ks}); 
+special cases included the digamma (\textgreek{ϝ} with later re-insertion of f/h during reconstruction) and the
+labio-velar \textit{q} (permitted to align with $\{q,p,k\}$).
+
+\paragraph{Matching logic.}
+Each Linear B form is tokenized into syllabograms and compared against every latinized Greek word by
+scanning both sequences left-to-right and greedily aligning syllabograms to characters.
+The matcher handles three syllabogram classes, with tailored rules:
+\begin{itemize}[leftmargin=2em]
+  \item \textbf{V (length~1):} align the same vowel; mismatches advance the Greek pointer (counted as a skip).
+  \item \textbf{CV (length~2):} align the initial consonant and then the vowel; special handling covers clusters
+        such as \textit{k}+\textit{s} that straddle the next syllable (e.g., \textit{ks}).
+  \item \textbf{Specific triads (length~3):} a small set (e.g., \textit{phu}) is matched as a fixed mini-pattern.
+\end{itemize}
+
+\paragraph{State tracked during scanning.}
+The algorithm maintains (i) the total number of skipped Greek characters and the maximum consecutive
+skip streak (to avoid over\=/skipping), (ii) a flag for illegal syllable mappings, and (iii) a small
+relaxation allowing a single liquid glide (e.g., an isolated ``r'').
+
+\paragraph{Acceptance gates.}
+After the pass, a candidate pair is accepted only if all of the following hold:
+\begin{enumerate}[label=(\roman*), leftmargin=2em]
+  \item near\=/complete coverage of the Linear B syllables (the LB pointer is at or near the end);
+  \item the Greek pointer is near the end (bounded tail);
+  \item total skips and maximum skip streak are below fixed thresholds;
+  \item an initial\-/character compatibility heuristic holds (to avoid wild misalignments);
+  \item no illegal syllable mapping was flagged;
+  \item for short Linear B words, stricter thresholds are applied (fewer allowed skips and a smaller tail).
+\end{enumerate}
+
+\paragraph{Outputs and design choice.}
+For each accepted pair, the algorithm records a coverage score,
+\[
+\text{coverage} \;=\; \frac{\text{matched syllables}}{\text{total syllables}},
+\]
+and reconstructs the Greek surface form by re\-/inserting any f/h positions suppressed during normalization.
+The overarching design targets \emph{recall over precision}: collect as many plausible pairs as possible, even at the cost of some spurious matches, to be filtered later.
+
+\begin{lstlisting}[language=Python, caption=Brute-Force matching algorithm, breaklines=true, postbreak=\mbox{\hspace{50pt}\textcolor{red}{$\hookrightarrow$}\space}]
+def match(lin_b_words, greek_words):
+    for lb_word in lin_b_words.keys():  # scan each Linear B entry
+        lb_syllables = lb_word.split("-") # LB sequence → syllables
+        for gr_word in greek_words.keys(): # scan each Greek candidate
+
+            gr_chars = list(gr_word) # Greek word → char list
+            i_syl = 0 # index over LB syllables
+            j_chr = 0 # index over Greek chars
+            skip_count = 0 # total skipped Greek chars
+            skip_streak = 0 # current consecutive skips
+            max_skip_streak = 0 # max consecutive skips seen
+            invalid_syllable = False # flag for invalid syllable mapping
+            skipped_syllables = [] # track skipped syllables if needed
+
+            while i_syl < len(lb_syllables) and j_chr < len(gr_chars):
+                lb_syllable = lb_syllables[i_syl]
+                gr_char = gr_chars[j_chr]
+
+                if len(lb_syllable) == 1:
+                    if gr_char == lb_syllable:
+                        skip_streak = 0
+                        i_syl += 1
+                        j_chr += 1
+                    else:
+                        skip_count += 1
+                        skip_streak += 1
+                        if skip_streak > max_skip_streak:
+                            max_skip_streak = skip_streak
+                        j_chr += 1
+
+                elif len(lb_syllable) == 2:
+                    cons = lb_syllable[0]
+
+                    if cons == "k":
+                        has_room = (j_chr + 2) < len(gr_chars)
+                        tail = gr_chars[j_chr + 1 : j_chr + 3]
+                        # checks double guttural
+                        has_dg = has_room and ("".join(tail) == lb_syllable)
+
+                        if gr_char == "k" and not has_dg:
+                            skip_streak = 0
+
+                            has_next_char = (j_chr + 1) < len(gr_chars)
+                            # checks ks
+                            next_is_s = has_next_char and (gr_chars[j_chr + 1] == "s")
+                            has_next_syl = i_syl < (len(lb_syllables) - 1)
+
+                            if next_is_s and has_next_syl:  # matched ks
+                                next_syl = lb_syllables[i_syl + 1]
+                                if next_syl[0] == "s":
+                                    i_syl += 2
+                                    j_chr += 2
+                                    vowel_ok = (
+                                        j_chr < len(gr_chars)
+                                        and next_syl[1] == gr_chars[j_chr]
+                                    )
+                                    if vowel_ok:
+                                        j_chr += 1
+                                else:
+                                    i_syl += 1
+                                    j_chr += 1
+                                    vowel_ok = (
+                                        j_chr < len(gr_chars)
+                                        and lb_syllable[1] == gr_chars[j_chr]
+                                    )
+                                    if vowel_ok:
+                                        j_chr += 1
+                            else:
+                                i_syl += 1
+                                j_chr += 1
+                                vowel_ok = (
+                                    j_chr < len(gr_chars)
+                                    and lb_syllable[1] == gr_chars[j_chr]
+                                )
+                                if vowel_ok:
+                                    j_chr += 1
+                        else:
+                            j_chr += 1
+                            skip_count += 1
+                            skip_streak += 1
+                            if skip_streak > max_skip_streak:
+                                max_skip_streak = skip_streak
+
+                    if cons == "q":  # labio-velar → {q,p,k}
+                        is_labio_map = gr_char in ("q", "p", "k")
+                        if is_labio_map:
+                            skip_streak = 0
+                            i_syl += 1
+                            j_chr += 1
+                            vowel_ok = (
+                                j_chr < len(gr_chars)
+                                and lb_syllable[1] == gr_chars[j_chr]
+                            )
+                            if vowel_ok:
+                                j_chr += 1
+                        else:
+                            j_chr += 1
+                            skip_count += 1
+                            skip_streak += 1
+                            if skip_streak > max_skip_streak:
+                                max_skip_streak = skip_streak
+                    ...
+                if len(lb_syllable) == 3:
+                    if lb_syllable == "phu":
+                        has_u = ((j_chr + 1) < len(gr_chars)) and (gr_chars[j_chr + 1] == "u")
+                        if gr_char == "p" and has_u:
+                            skip_streak = 0
+                            i_syl += 1
+                            j_chr += 2
+                        else:
+                            j_chr += 1
+                            skip_count += 1
+                            skip_streak += 1
+                            if skip_streak > max_skip_streak:
+                                max_skip_streak = skip_streak
+                    ...
+
+            # allow single liquid glide
+            if max_skip_streak == 2 and len(skipped_syllables) == 1:
+                if skipped_syllables[0][0] == "r":
+                    max_skip_streak = 0
+
+            # --- Acceptance constraints ---
+            start_ok = (
+                lb_word[0] == gr_word[0]
+                or (lb_word[0] == "p" and gr_chars[0] == "p")
+                ...
+            )
+            lb_aligned = i_syl >= (len(lb_syllables) - 1)
+            gr_near_end = j_chr >= (len(gr_word) - 3)
+            skips_ok = skip_count < 4
+            streak_ok = max_skip_streak <= 2
+            mapping_ok = not invalid_syllable
+
+            conds1 = (lb_aligned, gr_near_end, skips_ok, start_ok, streak_ok, mapping_ok)
+            gate1 = all(conds1)
+
+            short_lb = len(lb_syllables) <= 3
+            near_end_tight = j_chr >= (len(gr_word) - 2)
+            short_ok = (skip_count <= 2) and near_end_tight and (max_skip_streak < 2)
+            # conditions for shorter LB words
+            gate2 = (short_lb and short_ok) or (not short_lb)
+
+            if gate1 and gate2:
+                # Reconstruct normalized Greek, re-inserting 'f'/'h'
+                greek_norm_chars = list(greek_words[gr_word])
+                dropped = len(greek_words[gr_word]) < len(gr_chars)
+                if dropped:
+                    fh = ("f", "h")
+                    positions = [p for p, c in enumerate(gr_chars) if c in fh]
+                    for off, pos in enumerate(positions):
+                        greek_norm_chars.insert(pos + off, gr_chars[pos])
+
+                coverage = i_syl / len(lb_syllables)
+                match_pair = ("".join(greek_norm_chars), coverage)
+                lin_b_words[lb_word]["cognates"].append(match_pair)
+
+    return lin_b_words
+\end{lstlisting}
+
+\newpage
+
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{LTM Initialization} & \textbf{MLE} & \textbf{Flow with edit} & \textbf{Flow without edit} \\
+\hline
+zero & 0.827 & 0.828 & 0.781 \\
+custom & 0.841 & 0.841 & 0.840 \\
+\hline
+\end{tabular}
+\caption{Comparison of model performance on Luo's dataset.}
+\end{table}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{LTM Initialization} & \textbf{MLE} & \textbf{Flow with edit} & \textbf{Flow without edit} \\
+\hline
+zero & 0.694 & 0.711 & 0.671 \\
+custom & 0.662 & 0.662 & 0.672 \\
+\hline
+\end{tabular}
+\caption{Comparison of model performance on our dataset.}
+\end{table}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{LTM Initialization} & \textbf{Split} & \textbf{MLE} & \textbf{Flow with edit} & \textbf{Flow without edit} \\
+\hline
+\multirow{3}{*}{zero} 
+& Train& 0.782 & 0.785 & 0.732 \\
+& Validation & 0.717 & 0.717 & 0.663 \\
+& Test & 0.739 & 0.739 & 0.696 \\
+\hline
+\multirow{3}{*}{custom} 
+& Train& 0.457 & 0.469 & 0.486 \\
+& Validation & 0.446 & 0.467 & 0.511 \\
+& Test & 0.370 & 0.380 & 0.511 \\
+\hline
+\end{tabular}
+\caption{Comparison of model performance (Train, Validation, Test) on Luo's dataset.}
+\end{table}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{LTM Initialization} & \textbf{Split} & \textbf{MLE} & \textbf{Flow with edit} & \textbf{Flow without edit} \\
+\hline
+\multirow{3}{*}{zero} 
+& Train& 0.645 & 0.658 & 0.639 \\
+& Validation & 0.597 & 0.602 & 0.634 \\
+& Test & 0.625 & 0.646 & 0.646 \\
+\hline
+\multirow{3}{*}{custom} 
+& Train& 0.238 & 0.275 & 0.367 \\
+& Validation & 0.262 & 0.262 & 0.377 \\
+& Test & 0.224 & 0.234 & 0.370 \\
+\hline
+\end{tabular}
+\caption{Comparison of model performance (Train, Validation, Test) on our dataset.}
+\end{table}
+

@@ -170,7 +170,7 @@ This principle posits that signs which are visually similar (homomorphy) in both
 This observation has led to the widely accepted conclusion that Linear A encodes a language fundamentally different from Linear B, with the latter used to represent an archaic form of Ancient Greek.
 Consequently, although scholars are able to phonetically transcribe Linear A inscriptions, the language remains undeciphered and its meaning unknown. 
 
-\section{The decipherment of Linear B}
+\section{The decipherment of Linear B} \label{sec:decipherment}
 Ever since the discovery of the first Linear B tablets in 1900 by Sir Arthur Evans at Knossos, the script has been a subject of intense scholarly interest.
 Evans himself introduced the classification of Aegean scripts that is still used today.
 He also made the earliest attempts to decipher Linear B, though without success.
@@ -224,7 +224,7 @@ Some examples of these triplets are shown in Figure \ref{fig:kobler_triplets}. \
 \label{fig:kobler_triplets}
 \end{figure}
 
-\subsection{The decipherment by Ventris and Chadwick}
+\subsection{The decipherment by Ventris and Chadwick} \label{subsec:ventris-chadwick}
 The initial phase of the decipherment of Linear B involved the identification of numerical signs and easily recognizable logograms.
 This preliminary work was largely accomplished by Sir Arthur Evans, who successfully identified the most frequently occurring logograms and reconstructed the basic features of the numerical system.
 Notably, the Linear B script lacked a symbol for zero, but included fractional signs and was based on a decimal structure.
@@ -329,72 +329,3 @@ The decipherment of Linear B was finally confirmed one year later, when in 1953 
 This independent verification of the decipherment on material not previously available to Ventris provided undeniable evidence of his success. \cite{chad-ch6}
 
 The work of Ventris and Chadwick, by combining structural analysis with comparative linguistics, thus not only unlocked the meaning of Linear B but also illuminated the phonological landscape of the earliest attested form of the Greek language.
-
-\newpage
-
-\begin{table}[h!]
-\centering
-\begin{tabular}{|c|c|c|c|}
-\hline
-\textbf{LTM Initialization} & \textbf{MLE} & \textbf{Flow with edit} & \textbf{Flow without edit} \\
-\hline
-zero   & 0.827 & 0.828 & 0.781 \\
-custom & 0.841 & 0.841 & 0.840 \\
-\hline
-\end{tabular}
-\caption{Comparison of model performance on Luo's dataset.}
-\end{table}
-
-\begin{table}[h!]
-\centering
-\begin{tabular}{|c|c|c|c|}
-\hline
-\textbf{LTM Initialization} & \textbf{MLE} & \textbf{Flow with edit} & \textbf{Flow without edit} \\
-\hline
-zero   & 0.694 & 0.711 & 0.671 \\
-custom & 0.662 & 0.662 & 0.672 \\
-\hline
-\end{tabular}
-\caption{Comparison of model performance on our dataset.}
-\end{table}
-
-\begin{table}[h!]
-\centering
-\begin{tabular}{|c|c|c|c|c|}
-\hline
-\textbf{LTM Initialization} & \textbf{Split} & \textbf{MLE} & \textbf{Flow with edit} & \textbf{Flow without edit} \\
-\hline
-\multirow{3}{*}{zero} 
-& Train      & 0.782 & 0.785 & 0.732 \\
-& Validation & 0.717 & 0.717 & 0.663 \\
-& Test       & 0.739 & 0.739 & 0.696 \\
-\hline
-\multirow{3}{*}{custom} 
-& Train      & 0.457 & 0.469 & 0.486 \\
-& Validation & 0.446 & 0.467 & 0.511 \\
-& Test       & 0.370 & 0.380 & 0.511 \\
-\hline
-\end{tabular}
-\caption{Comparison of model performance (Train, Validation, Test) on Luo's dataset.}
-\end{table}
-
-\begin{table}[h!]
-\centering
-\begin{tabular}{|c|c|c|c|c|}
-\hline
-\textbf{LTM Initialization} & \textbf{Split} & \textbf{MLE} & \textbf{Flow with edit} & \textbf{Flow without edit} \\
-\hline
-\multirow{3}{*}{zero} 
-& Train      & 0.645 & 0.658 & 0.639 \\
-& Validation & 0.597 & 0.602 & 0.634 \\
-& Test       & 0.625 & 0.646 & 0.646 \\
-\hline
-\multirow{3}{*}{custom} 
-& Train      & 0.238 & 0.275 & 0.367 \\
-& Validation & 0.262 & 0.262 & 0.377 \\
-& Test       & 0.224 & 0.234 & 0.370 \\
-\hline
-\end{tabular}
-\caption{Comparison of model performance (Train, Validation, Test) on our dataset.}
-\end{table}
-
