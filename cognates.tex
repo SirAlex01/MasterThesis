@@ -2,91 +2,91 @@
 As explained in section~\ref{sec:decipherment}, the decipherment of Linear B required a collective effort that involved several scholars and extended over multiple decades.
 
 The main difficulties in any decipherment process concerning ancient languages arise from two factors: the absence of parallel texts that could guide the interpretation, and the extreme scarcity of surviving documents.
-Even for domain experts, decipherment therefore demands encyclopedic linguistic and historical knowledge, combined with an enormous amount of manual work that is often prohibitive in terms of time and resources. 
-Moreover, the challenges encountered during the decipherment of one language are rarely reusable for others, since much of the required work and insights are closely tied to the specific features of that language and cannot be easily generalized \cite{luo}. 
-For example, the rules mentioned at the end of section~\ref{subsec:ventris-chadwick} are highly specific to the context of Linear B and its unique characteristics, and do not even apply to closely related scripts, such as Cypriot or possibly Linear A (for which no certainty exists, as the language remains undeciphered).  
+Even for domain experts, decipherment therefore demands encyclopedic linguistic and historical knowledge, combined with an enormous amount of manual work that is often prohibitive in terms of time and resources.
+Moreover, the challenges encountered during the decipherment of one language are rarely reusable for others, since much of the required work and insights are closely tied to the specific features of that language and cannot be easily generalized \cite{luo}.
+For example, the rules mentioned at the end of section~\ref{subsec:ventris-chadwick} are highly specific to the context of Linear B and its unique characteristics, and do not even apply to closely related scripts, such as Cypriot or possibly Linear A (for which no certainty exists, as the language remains undeciphered).
 
 For these reasons, the introduction of computational methods and machine learning techniques has the potential to provide crucial assistance.
 Nevertheless, the central obstacle remains the limited amount of training data.
 This scarcity of examples makes it essential to design models that are able to learn effectively from small datasets and to generalize from minimal evidence.
 
-In this respect, it is important to note that not all machine learning architectures are equally suitable for such low-resource conditions.  
-Transformers, for example, are a class of neural networks that have achieved remarkable results in modern natural language processing tasks, such as machine translation and text generation.  
+In this respect, it is important to note that not all machine learning architectures are equally suitable for such low-resource conditions.
+Transformers, for example, are a class of neural networks that have achieved remarkable results in modern natural language processing tasks, such as machine translation and text generation.
 However, their success is strongly dependent on access to very large training corpora.
 In the absence of such data, as is the case for ancient scripts, the application of transformers becomes impractical.
 This explains why alternative architectures, which are better suited to scenarios where training data is scarce, are currently preferred in the computational study of ancient languages.
 
 \section{Identifying Cognates}
-Cognates are words in different languages that share a common etymological origin.  
-Identifying cognates is a crucial task in historical linguistics, as it allows researchers to trace the evolution of languages and to understand their relationships.  
-In the case of Linear B, the identification of cognates provided valuable correspondences between the syllabic script and the phonetic representations of Ancient Greek, which proved instrumental in the decipherment process.  
-Cognate matching was indeed a key aspect of Ventris' work, as he relied on clearly identifiable cognates to assign phonetic values to Linear B signs.  
-However, the task of identifying cognates is not always straightforward, since it requires a deep understanding of the historical and linguistic context of the languages involved.  
-In addition, several phonological transformations had taken place over time, including the differentiation of aspirated consonants and the loss of certain sounds once present in Linear B, such as the digamma ({\textgreek{ϝ}}) and the labio-velar consonant \textit{q}.  
+Cognates are words in different languages that share a common etymological origin.
+Identifying cognates is a crucial task in historical linguistics, as it allows researchers to trace the evolution of languages and to understand their relationships.
+In the case of Linear B, the identification of cognates provided valuable correspondences between the syllabic script and the phonetic representations of Ancient Greek, which proved instrumental in the decipherment process.
+Cognate matching was indeed a key aspect of Ventris' work, as he relied on clearly identifiable cognates to assign phonetic values to Linear B signs.
+However, the task of identifying cognates is not always straightforward, since it requires a deep understanding of the historical and linguistic context of the languages involved.
+In addition, several phonological transformations had taken place over time, including the differentiation of aspirated consonants and the loss of certain sounds once present in Linear B, such as the digamma ({\textgreek{ϝ}}) and the labio-velar consonant \textit{q}.
 
 Below are some examples of cognates identified between Linear B and Ancient Greek:  
 
 \begin{itemize}  
     \item \textlinb{\Ba\Be\Bti\Bto} (a-e-ti-to) $\rightarrow$ \textgreek{ἀέθιστος}, \textgreek{ἐθίζω} \\  
-    This example shows how a Linear B sequence corresponds directly to a recognizable Greek adjective and verb.  
+    This example shows how a Linear B sequence corresponds directly to a recognizable Greek adjective and verb.
 
     \item \textlinb{\Ba\Bdi\Bnwa\Bta} (a-di-nwa-ta) $\rightarrow$ \textgreek{Ἀδινϝᾶτας} \\  
-    An instance where the Linear B syllabogram "nwa" reflects the presence of the digamma.  
+    An instance where the Linear B syllabogram "nwa" reflects the presence of the digamma.
 
     \item \textlinb{\Be\Bma\Baii} (e-ma-ha) $\rightarrow$ \textgreek{Ἑρμᾶς}, \textgreek{Ἑρμαῖ}, \textgreek{Ἑρμαίας} \\  
-    Illustrates a clear lexical link to Greek terms related to Hermes.  
+    Illustrates a clear lexical link to Greek terms related to Hermes.
 
     \item \textlinb{\Bko\Bno\Bso} (ko-no-so) $\rightarrow$ \textgreek{Κνωσός}\\  
-    A straightforward toponym, the name of the main Minoan palace site.  
+    A straightforward toponym, the name of the main Minoan palace site.
 
     \item \textlinb{\Bwo\Bno\Bqe\Bwa} (wo-no-qe-wa) $\rightarrow$ \textgreek{Φονοκέϝας}, \textgreek{Φονοκέϝαν} \\  
-    Preserves traces of the digamma and labio-velar consonants.  
+    Preserves traces of the digamma and labio-velar consonants.
 
     \item \textlinb{\Bwo\Bro\Bki\Bjo\Bne\Bjo} (wo-ro-ki-jo-ne-jo) $\rightarrow$ \textgreek{ϝοργιονείον}, \textgreek{Ὀργιονεῖος}, \textgreek{Ὀργίωνες} \\  
-    A more complex example, relating to anthroponyms and associations.  
+    A more complex example, relating to anthroponyms and associations.
 
     \item \textlinb{\Bqi\Bsi\Bpe\Be} (qi-si-pe-e) $\rightarrow$ \textgreek{ξίφεις}, \textgreek{ξίφη}, \textgreek{ξίφεα} \\  
     Reflects the Linear B representation of the Greek word for "sword."  
 
     \item \textlinb{\Bre\Bu\Bko\Bto\Bro} (re-u-ko-to-ro) $\rightarrow$ \textgreek{Λεῦκτρον}, \textgreek{Λεῦκτροι} \\  
-    A toponym, attested both in Linear B and later Greek sources.  
+    A toponym, attested both in Linear B and later Greek sources.
 
     \item \textlinb{\Bqo\Bu\Bqo\Bta} (qo-u-qo-ta) $\rightarrow$ \textgreek{Βουβώτας} \\  
-    Demonstrates the phonetic evolution of labio-velar sounds.  
+    Demonstrates the phonetic evolution of labio-velar sounds.
 
     \item \textlinb{\Bqe\Bqi\Bno\Bme\Bna} (qe-qi-no-me-na) $\rightarrow$ \textgreek{γεγινώμενα}, \textgreek{γιγνόμενα} \\  
-    A verbal form that shows continuity in Greek morphology.  
+    A verbal form that shows continuity in Greek morphology.
 
     \item \textlinb{\Bpo\Bro\Bwi\Bto\Bjo} (po-ro-wi-to-jo) $\rightarrow$ \textgreek{πλωϝιστοῖο} \\  
-    Example of a genitive form with preservation of the digamma.  
+    Example of a genitive form with preservation of the digamma.
 
     \item \textlinb{\Bpo\Bti\Bpi} (po-ti-pi) $\rightarrow$ \textgreek{Πόρτις}, \textgreek{Πόρτιφι} \\  
-    Reflects a proper name with different Greek attestations.  
+    Reflects a proper name with different Greek attestations.
 
     \item \textlinb{\Ba\Bri\Bqa} (a-ri-qa) $\rightarrow$ \textgreek{Ἄρισβας} \\  
-    Example of an anthroponym preserving older consonantal values.  
+    Example of an anthroponym preserving older consonantal values.
 
     \item \textlinb{\Bko\Bno} (ko-no) $\rightarrow$ \textgreek{Σκοῖνος} \\  
-    Shows the addition of a consonant in Ancient Greek. 
+    Shows the addition of a consonant in Ancient Greek.
 \end{itemize}  
 
-\section{Datasets}
-In this section, the process of gathering and preparing the datasets used in this study is described.  
-It is worth noting that I made several choices in order to create a clean and consistent dataset.  
+\section{Datasets} \label{sec:datasets}
+In this section, the process of gathering and preparing the datasets used in this study is described.
+It is worth noting that I made several choices in order to create a clean and consistent dataset.
 The main choices are the following:
 
 \begin{itemize}
-    \item All diacritics, accents, and breathings were removed from Ancient Greek forms, resulting in a simplified text. For example \textgreek{ἀέθιστος} is represented as \textgreek{αεθιστος}.
+    \item All diacritics, accents, breathings, and iota subscripts were removed from Ancient Greek forms, resulting in a simplified text. For example \textgreek{ἀέθιστος} is represented as \textgreek{αεθιστος}.
 
     \item All instances of uppercase letters were converted to lowercase in order to normalize the data. For instance \textgreek{Κνωσός} is represented as \textgreek{κνωσος}.
     Note also that Linear B does not distinguish uppercase and lowercase.
     
     \item All instances of punctuation were removed.
     
-    \item Linear B words were represented using their Latinized transcription.  
+    \item Linear B words were represented using their Latinized transcription.
     Therefore, the dataset contains the word \textlinb{\Bko\Bwo} as ko-wo instead of the original Linear B characters.
 
-    \item The instances of digamma were inserted in a suitable position also in the Greek form, despite their disappearance from Classical Greek.  
+    \item The instances of digamma were inserted in a suitable position also in the Greek form, despite their disappearance from Classical Greek.
     For example, the word \textgreek{κόρος} is represented as \textgreek{κορfος} in the dataset.
     In some cases, the version without digamma is also included, as in \textgreek{κουρος}.
 
@@ -121,13 +121,13 @@ In general, the prompts followed these principles:
 \item \textbf{Salience cues (including UPPERCASE for emphasis):} Key requirements were emphasized to prioritize the most important aspects and reduce omission errors \cite{uppercase-is-all-you-need}.
 \end{itemize}
 
-When necessary, I adjusted the model’s generation settings to favor determinism: the \texttt{temperature} was set low (e.g., 0.1--0.3) to reduce randomness and increase repeatability, and \texttt{top-k} was fixed at 1 (greedy selection).
+When necessary, I adjusted the model's generation settings to favor determinism: the \texttt{temperature} was set low (e.g., 0.1--0.3) to reduce randomness and increase repeatability, and \texttt{top-k} was fixed at 1 (greedy selection).
 
 \subsection{Luo's Dataset}
 Luo's dataset is the one on which the creator of the NeuroDecipher model (introduced later) tested its performance.
 The model achieves excellent results on this dataset, reaching an accuracy of 84.7\% of cognates correctly matched \cite{luo}.
 
-However, the dataset is not without limitations. 
+However, the dataset is not without limitations.
 The main issue I identified upon closer inspection is that some proposed Greek cognates are not attested in extant Ancient Greek sources, but rather tentative transliterations of Linear B forms or artificially modified versions of Greek correspondences.
 While this may artificially improve the cognate matching task, it does not reflect a realistic linguistic scenario and makes the dataset unsuitable for use in an automatic translation pipeline.
 A few illustrative examples are given below:
@@ -144,8 +144,8 @@ This revised version was then used both to measure the performance of the NeuroD
 The resulting revised dataset comprises 976 Linear B entries paired with their respective Ancient Greek correspondences.
 
 \subsection{Tselentis' Dataset}
-Tselentis' dataset represents a valuable resource for the study of Linear B, as it comprises a comprehensive lexicon of Linear B terms and their corresponding Ancient Greek forms.  
-It serves as a crucial reference point for validating and enriching the cognate pairs identified in Luo's dataset.  
+Tselentis' dataset represents a valuable resource for the study of Linear B, as it comprises a comprehensive lexicon of Linear B terms and their corresponding Ancient Greek forms.
+It serves as a crucial reference point for validating and enriching the cognate pairs identified in Luo's dataset.
 
 The main drawback of Tselentis' lexicon is that it was only available as a PDF document, which made it necessary to manually transcribe the entries into a more usable format.
 After using an online OCR tool to extract its content into a CSV file, followed by targeted cleaning, a structured file containing all the fields in the lexicon was obtained.
@@ -213,21 +213,21 @@ The matcher handles three syllabogram classes, with tailored rules:
   \item \textbf{V (length~1):} align the same vowel; mismatches advance the Greek pointer (counted as a skip).
   \item \textbf{CV (length~2):} align the initial consonant and then the vowel; special handling covers clusters
         such as \textit{k}+\textit{s} that straddle the next syllable (e.g., \textit{ks}).
-  \item \textbf{Specific triads (length~3):} a small set (e.g., \textit{phu}) is matched as a fixed mini-pattern.
+  \item \textbf{Specific triads (length~3):} a small set of syllabograms (e.g., \textit{phu}) is matched as a fixed mini-pattern.
 \end{itemize}
 
 \paragraph{State tracked during scanning.}
 The algorithm maintains (i) the total number of skipped Greek characters and the maximum consecutive
-skip streak (to avoid over\=/skipping), (ii) a flag for illegal syllable mappings, and (iii) a small
+skip streak (to avoid over-skipping), (ii) a flag for illegal syllable mappings, and (iii) a small
 relaxation allowing a single liquid glide (e.g., an isolated ``r'').
 
 \paragraph{Acceptance gates.}
 After the pass, a candidate pair is accepted only if all of the following hold:
 \begin{enumerate}[label=(\roman*), leftmargin=2em]
-  \item near\=/complete coverage of the Linear B syllables (the LB pointer is at or near the end);
-  \item the Greek pointer is near the end (bounded tail);
-  \item total skips and maximum skip streak are below fixed thresholds;
-  \item an initial\-/character compatibility heuristic holds (to avoid wild misalignments);
+  \item near-complete coverage of the Linear B syllables, i.e.\ the pointer must reach the last or penultimate syllable;
+  \item the Greek pointer must lie within three characters of the word's end;
+  \item the total number of skips must be fewer than four and no more than two consecutive characters may be skipped;
+  \item an initial-character compatibility heuristic holds (to avoid wild misalignments);
   \item no illegal syllable mapping was flagged;
   \item for short Linear B words, stricter thresholds are applied (fewer allowed skips and a smaller tail).
 \end{enumerate}
@@ -237,16 +237,16 @@ For each accepted pair, the algorithm records a coverage score,
 \[
 \text{coverage} \;=\; \frac{\text{matched syllables}}{\text{total syllables}},
 \]
-and reconstructs the Greek surface form by re\-/inserting any f/h positions suppressed during normalization.
-The overarching design targets \emph{recall over precision}: collect as many plausible pairs as possible, even at the cost of some spurious matches, to be filtered later.
+and reconstructs the Greek surface form by re-inserting any f/h positions suppressed during normalization.
+The overarching design targets recall over precision: collect as many plausible pairs as possible, even at the cost of some spurious matches, to be filtered later.
 
 \begin{lstlisting}[language=Python, caption=Brute-Force matching algorithm, breaklines=true, postbreak=\mbox{\hspace{50pt}\textcolor{red}{$\hookrightarrow$}\space}]
 def match(lin_b_words, greek_words):
     for lb_word in lin_b_words.keys():  # scan each Linear B entry
-        lb_syllables = lb_word.split("-") # LB sequence → syllables
+        lb_syllables = lb_word.split("-") # LB sequence to syllables
         for gr_word in greek_words.keys(): # scan each Greek candidate
 
-            gr_chars = list(gr_word) # Greek word → char list
+            gr_chars = list(gr_word) # Greek word to char list
             i_syl = 0 # index over LB syllables
             j_chr = 0 # index over Greek chars
             skip_count = 0 # total skipped Greek chars
@@ -324,7 +324,7 @@ def match(lin_b_words, greek_words):
                             if skip_streak > max_skip_streak:
                                 max_skip_streak = skip_streak
 
-                    if cons == "q":  # labio-velar → {q,p,k}
+                    if cons == "q":  # labio-velar mapped to {q,p,k}
                         is_labio_map = gr_char in ("q", "p", "k")
                         if is_labio_map:
                             skip_streak = 0
@@ -401,9 +401,111 @@ def match(lin_b_words, greek_words):
     return lin_b_words
 \end{lstlisting}
 
+The brute-force search has complexity $O(N_{\text{LB}} \cdot N_{\text{GR}} \cdot L)$, where $N_{\text{LB}}$ is the number of Linear B forms, $N_{\text{GR}}$ is the number of Greek forms, and $L$ is the maximum length of words.
+For the translation dataset, $N_{\text{LB}} = 4809$ and $N_{\text{GR}} = 18646$, with $L \leq 19$, as the longest word is \textlinb{\Ba\Bni\Bja\Be\Be\Bro\Bpa\Bjo\Bqe\Bro\Bsa} (a-ni-ja-e-e-ro-pa-jo-qe-ro-sa).
+
+\paragraph{Outputs refinement.}
+Clearly, this brute-force approach is not perfect and, while it attempts to filter out very different words as much as possible, it inevitably returns more pairs than true cognates.
+This limitation is acceptable because a second filtering stage prunes and re-ranks candidates by means of prompt engineering.
+The filter is driven by a structured XML prompt and produces a strict JSON response. The main instructions given to Gemini~2.5~Flash can be summarized as follows:
+
+\begin{itemize}[leftmargin=2em]
+  \item \textbf{Invocation of Luo's principles}: the model must evaluate each proposal against the four cognate matching principles, which will be detailed in the next section, ensuring that they are applied consistently and rigorously.
+  These principles are distributional similarity of matching characters, monotonic character mapping within cognates, structural sparsity of cognate mapping, and significant cognate overlap within related languages.
+  \item \textbf{Character policy}: enforce the restricted output alphabet for Ancient Greek forms introduced in Section~\ref{sec:datasets}, disallowing accents, breathings, or subscript iota.
+  \item \textbf{Phonological mapping tables}: require adherence to explicit Linear B $\rightarrow$ Ancient Greek correspondence tables for consonants and vowels, supported by contextual notes (e.g. treatment of labiovelars, liquids, or clusters).
+  \item \textbf{Independence from hints}: all provided "proposed cognates" are treated as non-binding; the model must search beyond them and consider the broader Ancient Greek corpus.
+  \item \textbf{Plausibility assessment}: evaluate candidates against a rubric of evaluation criteria, aligned with the four principles, and reject items that fail any check.
+  \item \textbf{Reasoning scaffold}: follow an explicit five-step chain-of-thought structure to ensure consistency in the decision path: syllabogram analysis $\rightarrow$ monotonicity enforcement $\rightarrow$ sparsity audit $\rightarrow$ pattern comparison $\rightarrow$ composite ranking.
+  \item \textbf{Calibration of likelihoods}: apply a calibrated numerical scale with illustrative examples ranging from well-attested to speculative cases, so that likelihood scores are interpretable and comparable across words.
+  \item \textbf{Automatic downweighting and hard caps}: apply four penalties, for example, $-0.3$ for three or more non-trivial transformations or any reordering; $-0.2$ for rarity, conflict with scholarship, or semantic stretch, and enforce global caps: likelihood $<0.7$ whenever the Linear B sequence contains unknown syllabograms such as *19, and $<0.85$ for novel, unattested proposals even if other checks are passed.
+  \item \textbf{Worked examples}: provide a wide set of input-output examples illustrating common patterns (such as $q{+}s$, digamma insertion, or suffixal transformations) to calibrate the model's application of rules and character policy.
+  \item \textbf{Quality-control gate}: prefer fewer, higher-quality outputs over speculative additions and abstain when uncertain.
+  \item \textbf{Instance metadata}: input word block: Linear B form, completeness level, optional definition from Chadwick and Ventris' vocabulary \cite{chadwick-notes}, any pre-proposed cognates with their brute-force matching scores, and entity type, to give context without constraining the final choice.
+\end{itemize}
+
+The complete XML prompt and the exact JSON schema are presented in the source code repository.
+After this automated filtering stage, the dataset was manually reviewed to ensure the quality and reliability of the final cognate pairs.
+Additionally, some cognates pairs were added from Ventris and Chadwick's vocabulary \cite{chadwick-notes} when they were missing from the previous datasets.
+
+\section{Cognate Matching Model}
+In this section, the architecture and training procedure of the cognate matching model created by Jiaming Luo \cite{luo} are described.
+The model is based on a sequence-to-sequence (seq2seq) architecture with attention mechanisms, which has been shown to be effective for various natural language processing tasks, including machine translation and text generation.
+The model is trained to take a Linear B word as input and generate its corresponding Ancient Greek cognate as output.
+As explained in Luo's paper, the main challenge of the decipherment task is the lack of a strong supervision signal that guides standard machine translation algorithms.
+To address this challenge, he proposed an architecture that learns patterns of language transformation.
+Moreover, the model is designed to be language-agnostic, meaning that it can be applied to other decipherment tasks beyond Linear B and Ancient Greek.
+In order to achieve this, the model relies on a set of principles that capture the general characteristics of cognate relationships between languages.
+
+\subsection{Cognate Matching Principles}
+The four principles that guide the model's architecture and training are the following:
+\begin{enumerate}[leftmargin=2em, label=\textbf{\arabic*.}]
+    \item \textbf{Distributional similarity of matching characters:}
+    matching characters are expected to appear in similar places in corresponding cognates, therefore their local context should match as well.
+
+    \item \textbf{Monotonic character mapping within cognates:}
+    cognates are expected to exhibit largely monotonic alignments, as character reorderings are rare.
+
+    \item \textbf{Structural sparsity of cognate mapping:}
+    cognate matchings are expected to be sparse and near one-to-one between segments derived from the same proto-origin.
+
+    \item \textbf{Significant cognate overlap within related languages:}
+    it is assumed that the derived vocabulary will provide sufficient coverage for recovering lost cognates.
+\end{enumerate}
+
+\subsection{The Generative Framework}
+The model architecture relies on a latent variable $\mathcal{F}=\{f_{ij}\}$, representing the word-level alignment between the words in the lost language $\mathcal{X}=\{x_i\}$ and the known language $\mathcal{Y}=\{y_j\}$.
+The following joint probability is derived:
+\[
+\mathbf{P}(\mathcal{X}, \mathcal{Y})
+= \sum_{\mathcal{F}\in \mathbb{F}}
+  \mathbf{P}(\mathcal{F})\,\mathbf{P}(\mathcal{X}\mid \mathcal{F})\,\mathbf{P}(\mathcal{Y}\mid \mathcal{F}, \mathcal{X})
+\propto
+\sum_{\mathcal{F}\in \mathbb{F}}
+  \mathbf{P}(\mathcal{Y}\mid \mathcal{X}, \mathcal{F})
+=
+\sum_{\mathcal{F}\in \mathbb{F}}
+  \prod_{y_j\in \mathcal{Y}}
+  \mathbf{P}(y_j \mid \mathcal{X}, \mathcal{F}) \, ,
+\]
+where a uniform prior is assumed for $\mathbf{P}(\mathcal{F})$ and $\mathbf{P}(\mathcal{X}\mid \mathcal{F})$, and independence and identical distribution (i.i.d.) are assumed across $y_j\in\mathcal{Y}$.
+Here, $\mathbb{F}$ denotes the set of all valid values of the latent variable $\mathcal{F}$.
+
+The conditional probability $\mathbf{P}(y_j \mid \mathcal{X}, \mathcal{F})$ is further decomposed as:
+\[
+\mathbf{P}(y_j \mid \mathcal{X}, \mathcal{F})
+= \sum_{x_i\in \mathcal{X}} f_{ij}\cdot \mathbf{P}_{\theta}(y_j \mid x_i) \, ,
+\]
+where $\mathbf{P}_{\theta}(y_j \mid x_i)$ is a neural seq2seq model with parameters $\theta$ that generates $y_j$ given $x_i$.
+In this framework, the latent variable $\mathcal{F}$ captures the alignment between the two languages, incorporating the global constraints described by Properties~3 and~4, while the neural model learns to generate cognates based on character-level constraints defined in Properties~1 and~2.
+However, directly optimizing the joint probability is infeasible, as it requires summing over all possible values of $\mathcal{F}$.
+To overcome this issue, Luo adopted an Expectation-Maximization (EM) iterative training algorithm: the neural model is trained in the M-step to maximize the likelihood of $\prod_{y_j\in \mathcal{Y}} \mathbf{P}(y_j \mid \mathcal{X}, \mathcal{F})$ given fixed $\mathcal{F}$, while in the E-step $\mathcal{F}$ is estimated via a minimum-cost flow problem defined over the trained neural network.
+
+\subsection{NeuroDecipher Model}
+The neural model $\mathbf{P}_{\theta}(y_j \mid x_i)$, named NeuroDecipher, is based on a standard seq2seq architecture.
+The three main components of the model are the encoder, the decoder, and the attention mechanism.
+
+\paragraph{Encoder.}
+The encoder consists of a stack of two embedding layers and a bidirectional LSTM.
+This design enforces the requirement that character embeddings of the two languages reside in the same space, the Universal Character Embedding Space.
+This is achieved by using a universal embedding matrix $U\in\mathbb{R}^{\mathcal{U}\times E}$, where $\mathcal{U}$ is the dimensionality of the universal embedding space and $E$ is the character embedding size used by the model.
+The second embedding layer is a lost language character weight matrix $W_x\in\mathbb{R}^{V_b\times \mathcal{U}}$, where $V_b$ is the vocabulary size of the lost language.
+Therefore, the final embedding matrix for the lost language is $E_x = W_x U$.
+The bidirectional LSTM has hidden size $H$ and produces a sequence of hidden and cell states $(h_l,c_l)$ for $l=1,\ldots,N$, where $N$ is the number of layers of the LSTM.
+
+Thus, the encoder input is a batch of Linear B sequences with shape $\mathbb{R}^{B\times L\times V_b}$, where $B$ is the batch size, and $L$ is the (maximum) sequence length.
+The encoder output has shape $\mathbb{R}^{B\times L\times 2H}$, where $H$ is the hidden size of the LSTM and $2H$ accounts for the concatenation of forward and backward hidden states.
+Moreover, the hidden and cell states from all layers, each of shape $\mathbb{R}^{2N\times B\times H}$ (for $N$ LSTM layers in each direction), are averaged along the first dimension and used to initialize the hidden and cell states of each layer of the decoder.
+
+One of my experiments involved initializing the lost language LSTM's cell state with a projection of the FastText embeddings of the words in the batch concatenated.
+The motivation was that injecting additional contextual information might help the model capture relationships between Linear B and Ancient Greek more effectively.
+Empirically, this initialization stabilized training (more reliable convergence) but reduced final performance (see Section \ref{sec:results}).
+A likely cause is representational mismatch: FastText captures word-level semantics, but the task needs character-level mappings; this biases the model toward irrelevant signals, which confuses learning and hurts generalization.
+
+
 \newpage
 
-
+\subsection{Results} \label{sec:results}
 \begin{table}[h!]
 \centering
 \begin{tabular}{|c|c|c|c|}

@@ -2398,6 +2398,9 @@
     <bcf:citekey order="24" intorder="1">luo</bcf:citekey>
     <bcf:citekey order="25" intorder="1">tselentis</bcf:citekey>
     <bcf:citekey order="26" intorder="1">tselentis</bcf:citekey>
+    <bcf:citekey order="27" intorder="1">chadwick-notes</bcf:citekey>
+    <bcf:citekey order="28" intorder="1">chadwick-notes</bcf:citekey>
+    <bcf:citekey order="29" intorder="1">luo</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="nty">
