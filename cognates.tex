@@ -502,6 +502,91 @@ The motivation was that injecting additional contextual information might help t
 Empirically, this initialization stabilized training (more reliable convergence) but reduced final performance (see Section \ref{sec:results}).
 A likely cause is representational mismatch: FastText captures word-level semantics, but the task needs character-level mappings; this biases the model toward irrelevant signals, which confuses learning and hurts generalization.
 
+\paragraph{Decoder and Global Attention.}
+Decoding proceeds by iterative next-character prediction from a fixed start token.
+The decoder is a multi-layer Custom LSTM (as in Luo).
+For the first LSTM layer at step $t$, the input is the concatenation of the
+context vector $\tilde{h}_{t-1}$ and the embedding of the previously generated
+character $e_{t-1}$; for higher layers, the input is the hidden state of the
+preceding layer.
+The last LSTM layer produces the decoder state $c_t\in\mathbb{R}^{B\times H}$,
+which feeds a Global Attention module that integrates encoder and decoder’s information.
+
+Let the encoder outputs be $o_s(1),\ldots,o_s(L)\in\mathbb{R}^{B\times 2H}$.
+A learnable matrix $W_a\in\mathbb{R}^{2H\times H}$ linearly projects encoder
+states into the decoder space, and attention scores are computed by a
+compatibility (dot) function with $c_t$:
+\[
+s_t(i) \;=\; \bigl(W_a\,o_s(i)\bigr)\cdot c_t,
+\qquad
+\alpha_t \;=\; \mathrm{softmax}\!\bigl(s_t(1{:}L)\bigr)\in\mathbb{R}^{B\times L}.
+\]
+The attention weights summarize encoder information in two complementary ways:
+a content summary in the hidden-state space,
+\[
+c_s \;=\; \sum_{i=1}^{L} \alpha_t(i)\,o_s(i) \;\in\; \mathbb{R}^{B\times 2H},
+\]
+and a content summary directly in the embedding space,
+\[
+r \;=\; \sum_{i=1}^{L} \alpha_t(i)\,E_x(i) \;\in\; \mathbb{R}^{B\times E},
+\]
+where $E_x(i)$ is the lost-language input embedding of the $i$-th encoder
+character.
+
+The context vector $\tilde{h}_t$ fuses what the decoder is
+currently trying to produce ($c_t$) with what the encoder deems most
+relevant ($c_s$), and a residual anchor $r$ in the input embedding
+space.
+Concretely, we concatenate $c_s$ and $c_t$, map back to the model’s
+embedding space with $W_o\in\mathbb{R}^{3H\times E}$, and add the residual:
+\[
+\tilde{h}_t \;=\; W_o\,[\,c_s;\,c_t\,] \;+\; \lambda\, r
+\;\in\; \mathbb{R}^{B\times E}.
+\]
+The residual term $r$ serves two purposes: (a) it stabilizes learning by
+providing a direct pathway from input embeddings to the decoder (improving
+gradient flow and helping early decoding steps), and (b) it regularizes the
+attention fusion by anchoring $\tilde{h}_t$ to the same representation space
+as the inputs, which reduces drift and improves alignment consistency.
+The scalar $\lambda$ controls the contribution of this residual connection.
+
+The vector $\tilde{h}_t$ is then projected to the Ancient Greek vocabulary via
+\[
+\text{logits}_t \;=\; \tilde{h}_t\,E_y^{\top}\;\in\;\mathbb{R}^{B\times V_g},
+\qquad
+E_y \;=\; W_y\,U \;\in\; \mathbb{R}^{V_g\times E},
+\]
+followed by a softmax: $p_t=\mathrm{softmax}(\text{logits}_t)$.
+The predicted character is $\hat{y}_t=\arg\max p_t$.
+For the next step, the “previous-token” embedding is taken as the expected
+embedding under $p_t$,
+\[
+e_t \;=\; p_t\,E_y \;\in\; \mathbb{R}^{B\times E},
+\]
+and the process repeats until an end symbol is produced or a maximum length is
+reached.
+This design makes the context vector $\tilde{h}_t$ the central carrier of
+both encoder-side evidence and decoder-side character-level information, while the residual pathway
+ensures robust, stable decoding grounded in the input embedding space.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Images/luo_model_overview.png} % Adjust width and filename
+    \caption{Overview of the model architecture.\protect\footnotemark}
+    \label{fig:luo_model_overview}
+\end{figure}
+\footnotetext{Figure \ref{fig:luo_model_overview} prepared by Jiaming Luo.}
+
+
+
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.2\textwidth]{Images/luo_model.png} % Adjust width and filename
+    \caption{Graphical representation of the model architecture.}
+    \label{fig:luo_model}
+\end{figure}
 
 \newpage
 
