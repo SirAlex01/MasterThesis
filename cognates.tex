@@ -1,10 +1,10 @@
 \chapter{The cognate matching task}
-As explained in section~\ref{sec:decipherment}, the decipherment of Linear B required a collective effort that involved several scholars and extended over multiple decades.
+As explained in Section \ref{sec:decipherment}, the decipherment of Linear B required a collective effort that involved several scholars and extended over multiple decades.
 
 The main difficulties in any decipherment process concerning ancient languages arise from two factors: the absence of parallel texts that could guide the interpretation, and the extreme scarcity of surviving documents.
 Even for domain experts, decipherment therefore demands encyclopedic linguistic and historical knowledge, combined with an enormous amount of manual work that is often prohibitive in terms of time and resources.
 Moreover, the challenges encountered during the decipherment of one language are rarely reusable for others, since much of the required work and insights are closely tied to the specific features of that language and cannot be easily generalized \cite{luo}.
-For example, the rules mentioned at the end of section~\ref{subsec:ventris-chadwick} are highly specific to the context of Linear B and its unique characteristics, and do not even apply to closely related scripts, such as Cypriot or possibly Linear A (for which no certainty exists, as the language remains undeciphered).
+For example, the rules mentioned at the end of Section \ref{subsec:ventris-chadwick} are highly specific to the context of Linear B and its unique characteristics, and do not even apply to closely related scripts, such as Cypriot or possibly Linear A (for which no certainty exists, as the language remains undeciphered).
 
 For these reasons, the introduction of computational methods and machine learning techniques has the potential to provide crucial assistance.
 Nevertheless, the central obstacle remains the limited amount of training data.
@@ -210,10 +210,10 @@ Each Linear B form is tokenized into syllabograms and compared against every lat
 scanning both sequences left-to-right and greedily aligning syllabograms to characters.
 The matcher handles three syllabogram classes, with tailored rules:
 \begin{itemize}[leftmargin=2em]
-  \item \textbf{V (length~1):} align the same vowel; mismatches advance the Greek pointer (counted as a skip).
-  \item \textbf{CV (length~2):} align the initial consonant and then the vowel; special handling covers clusters
+  \item \textbf{V (length 1):} align the same vowel; mismatches advance the Greek pointer (counted as a skip).
+  \item \textbf{CV (length 2):} align the initial consonant and then the vowel; special handling covers clusters
         such as \textit{k}+\textit{s} that straddle the next syllable (e.g., \textit{ks}).
-  \item \textbf{Specific triads (length~3):} a small set of syllabograms (e.g., \textit{phu}) is matched as a fixed mini-pattern.
+  \item \textbf{Specific triads (length 3):} a small set of syllabograms (e.g., \textit{phu}) is matched as a fixed mini-pattern.
 \end{itemize}
 
 \paragraph{State tracked during scanning.}
@@ -412,7 +412,7 @@ The filter is driven by a structured XML prompt and produces a strict JSON respo
 \begin{itemize}[leftmargin=2em]
   \item \textbf{Invocation of Luo's principles}: the model must evaluate each proposal against the four cognate matching principles, which will be detailed in the next section, ensuring that they are applied consistently and rigorously.
   These principles are distributional similarity of matching characters, monotonic character mapping within cognates, structural sparsity of cognate mapping, and significant cognate overlap within related languages.
-  \item \textbf{Character policy}: enforce the restricted output alphabet for Ancient Greek forms introduced in Section~\ref{sec:datasets}, disallowing accents, breathings, or subscript iota.
+  \item \textbf{Character policy}: enforce the restricted output alphabet for Ancient Greek forms introduced in Section \ref{sec:datasets}, disallowing accents, breathings, or subscript iota.
   \item \textbf{Phonological mapping tables}: require adherence to explicit Linear B $\rightarrow$ Ancient Greek correspondence tables for consonants and vowels, supported by contextual notes (e.g. treatment of labiovelars, liquids, or clusters).
   \item \textbf{Independence from hints}: all provided "proposed cognates" are treated as non-binding; the model must search beyond them and consider the broader Ancient Greek corpus.
   \item \textbf{Plausibility assessment}: evaluate candidates against a rubric of evaluation criteria, aligned with the four principles, and reject items that fail any check.
@@ -453,7 +453,7 @@ The four principles that guide the model's architecture and training are the fol
     it is assumed that the derived vocabulary will provide sufficient coverage for recovering lost cognates.
 \end{enumerate}
 
-\subsection{The Generative Framework}
+\subsection{The Generative Framework} \label{sec:generative-framework}
 The model architecture relies on a latent variable $\mathcal{F}=\{f_{ij}\}$, representing the word-level alignment between the words in the lost language $\mathcal{X}=\{x_i\}$ and the known language $\mathcal{Y}=\{y_j\}$.
 The following joint probability is derived:
 \[
@@ -477,7 +477,7 @@ The conditional probability $\mathbf{P}(y_j \mid \mathcal{X}, \mathcal{F})$ is f
 = \sum_{x_i\in \mathcal{X}} f_{ij}\cdot \mathbf{P}_{\theta}(y_j \mid x_i) \, ,
 \]
 where $\mathbf{P}_{\theta}(y_j \mid x_i)$ is a neural seq2seq model with parameters $\theta$ that generates $y_j$ given $x_i$.
-In this framework, the latent variable $\mathcal{F}$ captures the alignment between the two languages, incorporating the global constraints described by Properties~3 and~4, while the neural model learns to generate cognates based on character-level constraints defined in Properties~1 and~2.
+In this framework, the latent variable $\mathcal{F}$ captures the alignment between the two languages, incorporating the global constraints described by Properties 3 and 4, while the neural model learns to generate cognates based on character-level constraints defined in Properties 1 and 2.
 However, directly optimizing the joint probability is infeasible, as it requires summing over all possible values of $\mathcal{F}$.
 To overcome this issue, Luo adopted an Expectation-Maximization (EM) iterative training algorithm: the neural model is trained in the M-step to maximize the likelihood of $\prod_{y_j\in \mathcal{Y}} \mathbf{P}(y_j \mid \mathcal{X}, \mathcal{F})$ given fixed $\mathcal{F}$, while in the E-step $\mathcal{F}$ is estimated via a minimum-cost flow problem defined over the trained neural network.
 
@@ -504,43 +504,43 @@ A likely cause is representational mismatch: FastText captures word-level semant
 
 \paragraph{Decoder and Global Attention.}
 Decoding proceeds by iterative next-character prediction from a fixed start token.
-The decoder is a multi-layer Custom LSTM (as in Luo).
+The decoder is a multi-layer Custom LSTM.
 For the first LSTM layer at step $t$, the input is the concatenation of the
 context vector $\tilde{h}_{t-1}$ and the embedding of the previously generated
 character $e_{t-1}$; for higher layers, the input is the hidden state of the
 preceding layer.
 The last LSTM layer produces the decoder state $c_t\in\mathbb{R}^{B\times H}$,
-which feeds a Global Attention module that integrates encoder and decoder’s information.
+which feeds a Global Attention module that integrates encoder and decoder's information.
 
 Let the encoder outputs be $o_s(1),\ldots,o_s(L)\in\mathbb{R}^{B\times 2H}$.
 A learnable matrix $W_a\in\mathbb{R}^{2H\times H}$ linearly projects encoder
 states into the decoder space, and attention scores are computed by a
-compatibility (dot) function with $c_t$:
+scalar product with $c_t$:
 \[
-s_t(i) \;=\; \bigl(W_a\,o_s(i)\bigr)\cdot c_t,
+s_t(k) \;=\; \bigl(W_a\,o_s(k)\bigr)\cdot c_t,
 \qquad
 \alpha_t \;=\; \mathrm{softmax}\!\bigl(s_t(1{:}L)\bigr)\in\mathbb{R}^{B\times L}.
 \]
 The attention weights summarize encoder information in two complementary ways:
 a content summary in the hidden-state space,
 \[
-c_s \;=\; \sum_{i=1}^{L} \alpha_t(i)\,o_s(i) \;\in\; \mathbb{R}^{B\times 2H},
+c_s \;=\; \sum_{k=1}^{L} \alpha_t(k)\,o_s(k) \;\in\; \mathbb{R}^{B\times 2H},
 \]
 and a content summary directly in the embedding space,
 \[
-r \;=\; \sum_{i=1}^{L} \alpha_t(i)\,E_x(i) \;\in\; \mathbb{R}^{B\times E},
+r \;=\; \sum_{k=1}^{L} \alpha_t(k)\,e_x(k) \;\in\; \mathbb{R}^{B\times E},
 \]
-where $E_x(i)$ is the lost-language input embedding of the $i$-th encoder
+where $e_x(k)$ is the lost-language input embedding of the $k$-th encoder
 character.
 
 The context vector $\tilde{h}_t$ fuses what the decoder is
 currently trying to produce ($c_t$) with what the encoder deems most
 relevant ($c_s$), and a residual anchor $r$ in the input embedding
 space.
-Concretely, we concatenate $c_s$ and $c_t$, map back to the model’s
+Concretely, we concatenate $c_s$ and $c_t$, map back to the model's
 embedding space with $W_o\in\mathbb{R}^{3H\times E}$, and add the residual:
 \[
-\tilde{h}_t \;=\; W_o\,[\,c_s;\,c_t\,] \;+\; \lambda\, r
+\tilde{h}_t \;=\; W_o\,[\,c_s;\,c_t\,] \;+\; \rho\, r
 \;\in\; \mathbb{R}^{B\times E}.
 \]
 The residual term $r$ serves two purposes: (a) it stabilizes learning by
@@ -548,7 +548,7 @@ providing a direct pathway from input embeddings to the decoder (improving
 gradient flow and helping early decoding steps), and (b) it regularizes the
 attention fusion by anchoring $\tilde{h}_t$ to the same representation space
 as the inputs, which reduces drift and improves alignment consistency.
-The scalar $\lambda$ controls the contribution of this residual connection.
+The scalar $\rho$ controls the contribution of this residual connection.
 
 The vector $\tilde{h}_t$ is then projected to the Ancient Greek vocabulary via
 \[
@@ -558,16 +558,22 @@ E_y \;=\; W_y\,U \;\in\; \mathbb{R}^{V_g\times E},
 \]
 followed by a softmax: $p_t=\mathrm{softmax}(\text{logits}_t)$.
 The predicted character is $\hat{y}_t=\arg\max p_t$.
-For the next step, the “previous-token” embedding is taken as the expected
+For the next step, the "previous-token" embedding is taken as the expected
 embedding under $p_t$,
 \[
 e_t \;=\; p_t\,E_y \;\in\; \mathbb{R}^{B\times E},
 \]
-and the process repeats until an end symbol is produced or a maximum length is
-reached.
+and the process repeats for a number of steps corresponding to the length of the longest Ancient Greek word in the corpus.
 This design makes the context vector $\tilde{h}_t$ the central carrier of
 both encoder-side evidence and decoder-side character-level information, while the residual pathway
 ensures robust, stable decoding grounded in the input embedding space.
+The overall model architecture is illustrated in Figure \ref{fig:luo_model}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.2\textwidth]{Images/luo_model.png} % Adjust width and filename
+    \caption{Graphical representation of the model architecture.}
+    \label{fig:luo_model}
+\end{figure}
 
 \begin{figure}[H]
     \centering
@@ -577,83 +583,371 @@ ensures robust, stable decoding grounded in the input embedding space.
 \end{figure}
 \footnotetext{Figure \ref{fig:luo_model_overview} prepared by Jiaming Luo.}
 
+\subsection{Output Refinement}
+The model supports three output modes.
+The first is a corpus-constrained maximum-likelihood selection (MLE) based on the decoder's character distributions.
+Given the decoder outputs $\{p_t\}$ for $t=1,\ldots,T_{\max}$, where $p_t\in\mathbb{R}^{V_g}$ is a probability vector over the Greek vocabulary at step $t$, each candidate word $y_j=(y_{j, 1},\ldots,y_{j, T_w})$ in the lexicon is scored by the product of the probabilities of its characters:
+\[
+\mathbf{P}_{\theta}(y_j \mid x_i)
+= \prod_{t=1}^{T_w} p_t[y_{j, t}] \, ,
+\]
+Equivalently, if $E(y_j)\in\{0,1\}^{T_w\times V_g}$ is the one-hot matrix of $y_j$ (row $t$ is one-hot for $y_{j,t}$), indicating with $E_t(y_j)$ the $t$-th row, then
+\[
+\log \mathbf{P}_{\theta}(y_j \mid x_i)
+= \sum_{t=1}^{T_w} E_t(y_j)\,\log p_t \, ,
+\]
+which is the form used in practice for numerical stability.
 
+As explained in Section \ref{sec:generative-framework}, the other two output modes are defined via a minimum-cost flow over a bipartite graph.
+Edges from source to lost-language nodes have unit capacity; edges from known-language nodes to sink have capacity $C$ (a hyperparameter); the edges between languages have capacity $1$.
+The two modes differ only in how the edge costs $d_{ij}$ (from $x_i$ to $y_j$) are computed.
 
+In the first flow mode, set $d_{ij}=-\log \mathbf{P}_{\theta}(y_j\mid x_i)$, i.e., reuse the corpus-constrained MLE score.
+
+In the second flow mode, the character probabilities $\{p_t\}$ are used to sample multiple candidate Ancient Greek words, which are then compared to each lexicon word $y_j$ via normalized edit distance.
+For each lost language item $x_i$ we estimate, for every lexicon word $y_j$, an expected normalized edit distance under the decoder's output distributions:
+
+\begin{enumerate}[leftmargin=2em]
+\item \textbf{Sample $S$ strings from the decoder.}
+Using the per-step character distributions $\{p_t\}_{t=1}^{T_{\max}}$, optionally sharpened by a temperature $\alpha>1$, independently draw $S$ strings and truncate at \textsc{eos}:
+$s_{i,k}=(s_{i,k,1},\ldots,s_{i,k,T_{s_{i,k}}})$, $k=1,\ldots,S$.
+
+\item \textbf{Score each sample by its (log-)likelihood.}
+With an \textsc{eos} mask $m_{i,k,t}\in\{0,1\}$, define
+\[
+\log \mathbf{P}(s_{i,k}\!\mid x_i)
+\;=\;
+\sum_{t=1}^{T_{\max}} m_{i,k,t}\,\log p_t\!\bigl[s_{i,k,t}\bigr].
+\]
+
+\item \textbf{Compute normalized edit distances to each candidate.}
+For every lexicon word $y_j$ and each sample $s_{i,k}$,
+\[
+\delta\bigl(y_j,s_{i,k}\bigr)
+\;=\;
+\frac{\mathrm{Lev}\bigl(y_j,s_{i,k}\bigr)}
+     {\min\!\bigl(\lvert y_j\rvert,\lvert s_{i,k}\rvert\bigr)+1}\,.
+\]
+Also the "original" candidate with zero distance is included:
+$\delta\bigl(y_j,s_{i,0}\bigr)\equiv 0$ and score
+$\log \mathbf{P}(s_{i,0}\!\mid x_i)\equiv \log \mathbf{P}_{\theta}(y_j\!\mid x_i)$.
+
+\item \textbf{Weight and average.}
+Convert the $(1+S)$ log-scores
+$\{\log \mathbf{P}(s_{i,k}\!\mid x_i)\}_{k=0}^{S}$
+to non-negative weights $\{w_{i,k}\}_{k=0}^{S}$ proportional to their likelihoods and normalized to sum to $1$.
+Set the edge cost to the expected normalized edit distance:
+\[
+d_{ij}
+\;=\;
+\sum_{k=0}^{S} w_{i,k}\,\delta\bigl(y_j,s_{i,k}\bigr).
+\]
+\end{enumerate}
 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1.2\textwidth]{Images/luo_model.png} % Adjust width and filename
-    \caption{Graphical representation of the model architecture.}
-    \label{fig:luo_model}
+    \includegraphics[width=1\textwidth]{Images/luo_flow.png} % Adjust width and filename
+    \caption{Overview of the min-cost flow architecture.\protect\footnotemark}
+    \label{fig:luo_flow}
+\end{figure}
+\footnotetext{Figure \ref{fig:luo_flow} prepared by Jiaming Luo.}
+
+\subsection{The loss functions}
+The model is trained by minimizing the objective function introduced in Section \ref{sec:generative-framework}.
+However, the flow solver returns sparse values, as the flow values for the edges are mostly zeros.
+This would likely discard most valid cognate pairs during training.
+
+To address this issue, Luo proposed to use an exponential decay for the flow values in the loss function computation.
+These values are updated in each E-step and used in the M-step to compute the loss.
+Concretely, the flow values at iteration $\tau$ are updated as follows:
+\[
+f_{ij}^{(\tau)} \;=\; \gamma\,f_{ij}^{(\tau-1)} + (1-\gamma)\,\tilde{f}_{ij}^{(\tau)} \quad \forall\, i,j,
+\]
+where $\tilde{f}_{ij}^{(\tau)}$ are the flow values returned by the flow solver at iteration $\tau$, and $\gamma\in[0,1)$ is a hyperparameter that controls the decay rate.
+
+The loss function is then defined as:
+\begin{gather*}
+\mathcal{L}_{\mathrm{NLL}} =
+- \sum_{y_j \in \mathcal{Y}} f_j^{(\tau)} \log \left(\sum_{x_i \in \mathcal{X}} \exp \!\left(\log f_{ij}^{(\tau)} + \log \mathbf{P}_{\theta}(y_j \mid x_i) \right) \right) \;= \\[2pt]
+- \sum_{y_j \in \mathcal{Y}} f_j^{(\tau)} \log \left(\sum_{x_i \in \mathcal{X}} f_{ij}^{(\tau)} \cdot \mathbf{P}_{\theta}(y_j \mid x_i) \right) = - \log \left(\prod_{y_j \in \mathcal{Y}} \left( \sum_{x_i \in \mathcal{X}} f_{ij}^{(\tau)} \cdot \mathbf{P}_{\theta}(y_j \mid x_i) \right)^{f_j^{(\tau)}} \right) \, ,
+\end{gather*}
+where $f_j^{(\tau)} = \sum_{x_i \in \mathcal{X}} f_{ij}^{(\tau)}$ is the aggregated flow into node $y_j$ and acts as a weight for the loss of that word.
+
+An additional loss component is introduced to encourage monotonic alignments.
+This component, called monotonic alignment regularization, penalizes unaligned positions of predicted characters.
+The loss acts directly on the attention weights $\alpha_t$ produced by the Global Attention module.
+
+Concretely, the attention weights are interpreted, for each word of the lost language $x_i$, as the alignment probability over the input sequence at each decoding step $t$.
+Therefore, $\alpha_t^{(i)}(k) = \mathbf{P}(a_t^{(i)}=k \mid x_i)$, where $a_t^{(i)}$ is the alignment position at step $t$ for word $x_i$.
+This probability is used to derive the expected alignment position for each character of the output sequence:
+\[
+pos_t^{(i)} \;=\; \sum_{k=1}^{L} k \cdot \alpha_t^{(i)}(k)
+\;=\; \sum_{k=1}^{L} k \cdot \mathbf{P}(a_t^{(i)}=k \mid x_i) \, .
+\]
+The monotonic alignment regularization loss is then defined as:
+\[
+\mathcal{L}_{\mathrm{MAR}} \;=\; \sum_{x_i \in \mathcal{X}} \sum_{t=1}^{T_{\max}} \bigl(pos_t^{(i)} - pos_{t-2}^{(i)} - 1\bigr)^2 \, ,
+\]
+to accommodate the fact that Linear B is a syllabic language and usually one Linear B sign corresponds to two Greek letters.
+An example of alignment between a Linear B word and its Ancient Greek cognate is presented in Figure \ref{fig:alignment_example}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{Images/alignment.png} % Adjust width and filename
+    \caption{Example of alignment between a Linear B word and its Ancient Greek cognate. \cmark\ and \xxmark\ indicate correct and incorrect alignment positions, respectively. The misalignment between \textlinb{\Bno} (no) and \textgreek{ν} corresponds to a deletion error, while the misalignment between \textlinb{\Bso} (so) and \textgreek{ς} corresponds to an insertion error.\protect\footnotemark}
+    \label{fig:alignment_example}
+\end{figure}
+\footnotetext{Figure \ref{fig:alignment_example} prepared by Jiaming Luo.}
+
+The final loss function is a weighted sum of the two components:
+\[
+\mathcal{L} \;=\; \mathcal{L}_{\mathrm{NLL}} + \lambda\,\mathcal{L}_{\mathrm{MAR}} \, ,
+\]
+where $\lambda$ is a hyperparameter that controls the trade-off between the two loss components.
+
+\subsection{Training Procedure}
+As anticipated in Section \ref{sec:generative-framework}, training proceeds in an EM-style loop.
+We initialize the alignment flow matrix with a simple prior and then alternate between:
+
+\begin{itemize}[leftmargin=2em]
+  \item \textbf{M-step:} fit the seq2seq parameters \(\theta^{(\tau)}\) by maximizing the corpus likelihood under the fixed flows \(f^{(\tau-1)}\).
+  \item \textbf{E-step:} recompute edge costs from \(\theta^{(\tau)}\), solve a minimum-cost flow to obtain raw flows \(\tilde f^{(\tau)}\), and update the stable flows via exponential smoothing:
+  \[
+    f_{ij}^{(\tau)} \;=\; \gamma\,f_{ij}^{(\tau-1)} \;+\; (1-\gamma)\,\tilde f_{ij}^{(\tau)} \, .
+  \]
+\end{itemize}
+
+To reduce overfitting to the previous iterate and to avoid poor local minima, the neural parameters are re-initialized at the start of each new M-step.
+This procedure is summarized in the pseudocode of Algorithm \ref{alg:em-flow}.
+
+This behavior yields distinctive loss/accuracy trajectories for each split (Figure \ref{fig:validation-acc}): curves change sharply at E-M boundaries because flows are recomputed and model parameters are re-initialized.
+A practical mitigation is to aggregate within each E-step (e.g., average across its M-steps) or, more conservatively, to report only the final M-step metrics.
+
+The full training procedure and loss computations are graphically illustrated in Figure \ref{fig:luo_framework}.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.46\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Images/accuracy_all_modes_validation.png}
+        \caption{Accuracy at each M-step.}
+        \label{fig:validation-acc-m}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.46\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Images/average_accuracy_all_modes_validation.png}
+        \caption{Average accuracy at each E-step.}
+        \label{fig:validation-acc-e}
+    \end{subfigure}
+    \caption{Validation accuracy during training. (a) Raw per M-step accuracy. \\ 
+    (b) Accuracy averaged within each E-step.}
+    \label{fig:validation-acc}
 \end{figure}
 
-\newpage
+\begin{algorithm}[H]
+    \SetAlgoNoLine
+    \DontPrintSemicolon
+    \SetAlgoNoEnd
+    
+    \SetKwInOut{Input}{Input}
+    \SetKwInOut{Output}{Output}
+    \SetKwProg{Fn}{Function}{}{}
+
+    \Input{$\mathcal{X}, \mathcal{Y}$ (vocabularies);\ $T$ (number of iterations);\ $N$ (number of cognate pairs to identify)}
+    \Output{$f^{(T)}_{ij}$ (final soft alignments/flows)}
+    
+    \BlankLine
+    $f^{(0)}_{ij} \gets \dfrac{N}{|\mathcal{X}|\,|\mathcal{Y}|}$ \tcp*{Initialize uniform flow}
+    \For{$\tau \gets 1$ \KwTo $T$}{
+        $\theta^{(\tau)} \gets \mathrm{MLE\mbox{-}TRAIN}\!\bigl(f^{(\tau-1)}_{ij}\bigr)$\;
+        $d^{(\tau)}_{ij} \gets \mathrm{EDIT\mbox{-}DIST}\!\bigl(x_i, y_j;\, \theta^{(\tau)}\bigr)$\;
+        $\tilde f^{(\tau)}_{ij} \gets \mathrm{MIN\mbox{-}COST\mbox{-}FLOW}\!\bigl(d^{(\tau)}_{ij}\bigr)$\;
+        $f^{(\tau)}_{ij} \gets \gamma\, f^{(\tau-1)}_{ij} + (1-\gamma)\,\tilde f^{(\tau)}_{ij}$\;
+        \textsc{Reset}$\!\bigl(\theta^{(\tau)}\bigr)$\;
+    }
+    \Return{$f^{(T)}_{ij}$}\;
+
+    \BlankLine
+    \Fn{MLE-TRAIN{$\bigl(f^{(\tau)}_{ij}\bigr)$}}{
+        $\displaystyle \theta^{(\tau)} \gets \arg\max_{\theta}\ \prod_{y_j\in\mathcal{Y}} \mathbf{P}_{\theta}\!\bigl(y_j \mid \mathcal{X}, \mathcal{F}\bigr)$\;
+        \Return{$\theta^{(\tau)}$}\;
+    }
+
+    \caption{Iterative training with EM and minimum-cost flow \protect\footnotemark}\label{alg:em-flow}
+\end{algorithm}
+\footnotetext{Algorithm \ref{alg:em-flow} taken by Jiaming Luo.}
+
+\begin{figure}[H]
+    \begin{adjustbox}{center}
+        \includegraphics[width=1.25\textwidth]{Images/luo_framework.png}
+    \end{adjustbox}
+    \caption{Graphical outline of Luo's training procedure.}
+    \label{fig:luo_framework}
+\end{figure}
 
 \subsection{Results} \label{sec:results}
+In this section, I present the results of my experiments with the cognate matching model on three datasets:
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{Luo's dataset} \cite{luo}, which contains 919 cognate pairs.
+    \item \textbf{Luo's corrected dataset}, which contains 976 cognate pairs, obtained by applying some manual corrections on Luo's dataset.
+    \item \textbf{Our dataset}, which contains 1911 cognate pairs from both Luo's dataset and Tselentis' \cite{tselentis} dataset, with additional manually identified pairs using the brute-force algorithm, and Ventris and Chadwick's notes \cite{chadwick-notes}.
+\end{itemize}
+
+Overall, I ran two sets of experiments.
+In the first set, I compared the performance of the model on the full datasets, without defining train/validation/test splits.
+In the second set, I defined train/validation/test splits for both Luo's dataset and our dataset, and compared the performance of the model on each split.
+The sizes of the splits are the following: 80\% of samples for training, 10\% for validation, and 10\% for test.
+For both sets of experiments, I compared the model across all output modes, with and without initializing the LSTM cell states with FastText embeddings.
+The results are presented in the tables below.
+
 \begin{table}[h!]
 \centering
 \begin{tabular}{|c|c|c|c|}
 \hline
-\textbf{LTM Initialization} & \textbf{MLE} & \textbf{Flow with edit} & \textbf{Flow without edit} \\
+\textbf{LSTM Initialization} & \textbf{MLE} & \textbf{Flow without edit} & \textbf{Flow with edit} \\
 \hline
-zero & 0.827 & 0.828 & 0.781 \\
-custom & 0.841 & 0.841 & 0.840 \\
+zero   & 0.830 & 0.831 & 0.781 \\
+custom & 0.822 & 0.822 & 0.820 \\
 \hline
 \end{tabular}
-\caption{Comparison of model performance on Luo's dataset.}
+\caption{Comparison of model performance on Luo's original dataset.}
 \end{table}
 
 \begin{table}[h!]
 \centering
 \begin{tabular}{|c|c|c|c|}
 \hline
-\textbf{LTM Initialization} & \textbf{MLE} & \textbf{Flow with edit} & \textbf{Flow without edit} \\
+\textbf{LSTM Initialization} & \textbf{MLE} & \textbf{Flow without edit} & \textbf{Flow with edit} \\
 \hline
-zero & 0.694 & 0.711 & 0.671 \\
+zero   & 0.827 & 0.828 & 0.781 \\
+custom & 0.841 & 0.841 & 0.840 \\
+\hline
+\end{tabular}
+\caption{Comparison of model performance on Luo's corrected dataset.}
+\end{table}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{LSTM Initialization} & \textbf{MLE} & \textbf{Flow without edit} & \textbf{Flow with edit} \\
+\hline
+zero   & 0.694 & 0.711 & 0.671 \\
 custom & 0.662 & 0.662 & 0.672 \\
 \hline
 \end{tabular}
 \caption{Comparison of model performance on our dataset.}
 \end{table}
 
+It can be observed that, despite the stabilization effect of the custom LSTM initialization, when the model converges with a zero initialization it achieves better performance.
+Particularly, the model attains higher accuracy on our more challenging and extensive dataset, reaching 71.1\% with the flow without edit mode.
+The final accuracy and loss at each E-step during training on our dataset with zero initialization of the cell states are presented in Figure \ref{fig:acc-loss-all}.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.46\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Images/final_accuracy_all_modes.png}
+        \caption{Final accuracy at each E-step.}
+        \label{fig:final-acc-all}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.46\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Images/final_loss_all_metrics.png}
+        \caption{Final loss at each E-step.}
+        \label{fig:final-loss-all}
+    \end{subfigure}
+    \caption{Metrics for the zero-initialized model during training on our dataset. \\
+    (a) Accuracy. (b) Loss.}
+    \label{fig:acc-loss-all}
+\end{figure}
+
+The same trends are observed in the experiments with train/validation/test splits.
+However, due to the reduced size of the training set and the removal of some cognate pairs from it, the overall performance is lower.
+While the zero-initialized model remains strong, the custom-initialized variant degrades substantially.
+The results are presented in the tables below.
+
 \begin{table}[h!]
 \centering
 \begin{tabular}{|c|c|c|c|c|}
 \hline
-\textbf{LTM Initialization} & \textbf{Split} & \textbf{MLE} & \textbf{Flow with edit} & \textbf{Flow without edit} \\
+\textbf{LSTM Init} & \textbf{Split} & \textbf{MLE} & \textbf{Flow w/o edit} & \textbf{Flow w/ edit} \\
 \hline
-\multirow{3}{*}{zero} 
-& Train& 0.782 & 0.785 & 0.732 \\
+\multirow{3}{*}{zero}
+& Train      & 0.789 & 0.790 & 0.735 \\
+& Validation & 0.663 & 0.674 & 0.696 \\
+& Test       & 0.761 & 0.761 & 0.728 \\
+\hline
+\multirow{3}{*}{custom}
+& Train      & 0.411 & 0.423 & 0.435 \\
+& Validation & 0.391 & 0.424 & 0.435 \\
+& Test       & 0.359 & 0.359 & 0.435 \\
+\hline
+\end{tabular}
+\caption{Performance (Train/Validation/Test) on Luo's original dataset.}
+\end{table}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{LSTM Init} & \textbf{Split} & \textbf{MLE} & \textbf{Flow w/o edit} & \textbf{Flow w/ edit} \\
+\hline
+\multirow{3}{*}{zero}
+& Train      & 0.782 & 0.785 & 0.732 \\
 & Validation & 0.717 & 0.717 & 0.663 \\
-& Test & 0.739 & 0.739 & 0.696 \\
+& Test       & 0.739 & 0.739 & 0.696 \\
 \hline
-\multirow{3}{*}{custom} 
-& Train& 0.457 & 0.469 & 0.486 \\
+\multirow{3}{*}{custom}
+& Train      & 0.457 & 0.469 & 0.486 \\
 & Validation & 0.446 & 0.467 & 0.511 \\
-& Test & 0.370 & 0.380 & 0.511 \\
+& Test       & 0.370 & 0.380 & 0.511 \\
 \hline
 \end{tabular}
-\caption{Comparison of model performance (Train, Validation, Test) on Luo's dataset.}
+\caption{Performance (Train/Validation/Test) on Luo's corrected dataset.}
 \end{table}
 
 \begin{table}[h!]
 \centering
 \begin{tabular}{|c|c|c|c|c|}
 \hline
-\textbf{LTM Initialization} & \textbf{Split} & \textbf{MLE} & \textbf{Flow with edit} & \textbf{Flow without edit} \\
+\textbf{LSTM Init} & \textbf{Split} & \textbf{MLE} & \textbf{Flow w/o edit} & \textbf{Flow w/ edit} \\
 \hline
-\multirow{3}{*}{zero} 
-& Train& 0.645 & 0.658 & 0.639 \\
+\multirow{3}{*}{zero}
+& Train      & 0.645 & 0.658 & 0.639 \\
 & Validation & 0.597 & 0.602 & 0.634 \\
-& Test & 0.625 & 0.646 & 0.646 \\
+& Test       & 0.625 & 0.646 & 0.646 \\
 \hline
-\multirow{3}{*}{custom} 
-& Train& 0.238 & 0.275 & 0.367 \\
+\multirow{3}{*}{custom}
+& Train      & 0.238 & 0.275 & 0.367 \\
 & Validation & 0.262 & 0.262 & 0.377 \\
-& Test & 0.224 & 0.234 & 0.370 \\
+& Test       & 0.224 & 0.234 & 0.370 \\
 \hline
 \end{tabular}
-\caption{Comparison of model performance (Train, Validation, Test) on our dataset.}
+\caption{Performance (Train/Validation/Test) on our dataset.}
 \end{table}
 
+This significant drop in the custom-initialized runs is consistent with a loss–accuracy divergence caused by a representation mismatch.
+FastText injects word-level semantic priors into a character-mapping task.
+As a result, the model becomes confidently wrong on many instances: the negative log-likelihood can keep improving (higher confidence), while accuracy on held-out data declines (worse argmax decisions).
+In short, the initialization biases the decoder toward signals that are orthogonal to the target grapheme-level correspondences, leading to miscalibration and poorer generalization, due to representational mismatch.
+
+The final accuracy of all splits, using MLE mode, and the final accuracy of the test split, using all output modes, of the zero-initialized model during training on our dataset are presented in Figure \ref{fig:acc-loss-splits}.
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.46\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Images/final_accuracy_all_modes_test.png}
+        \caption{Final accuracy at each E-step for the test set in all modes.}
+        \label{fig:final-acc-test-all}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.46\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Images/final_accuracy_mle_mode_all_splits.png}
+        \caption{Final accuracy at each E-step in MLE mode for all splits.}
+        \label{fig:final-acc-mle-all}
+    \end{subfigure}
+    \caption{Metrics for the zero-initialized model during training on our dataset. \\ 
+    (a) Accuracy for the test set in all modes. (b) Accuracy in MLE mode for all splits.}
+    \label{fig:acc-loss-splits}
+\end{figure}
