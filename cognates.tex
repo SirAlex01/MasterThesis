@@ -1,4 +1,4 @@
-\chapter{The cognate matching task}
+\chapter{The cognate matching task} \label{chap:cognates}
 As explained in Section \ref{sec:decipherment}, the decipherment of Linear B required a collective effort that involved several scholars and extended over multiple decades.
 
 The main difficulties in any decipherment process concerning ancient languages arise from two factors: the absence of parallel texts that could guide the interpretation, and the extreme scarcity of surviving documents.
@@ -198,7 +198,7 @@ For transparency and repeatability, I detail here the precise directives provide
 Applying these directives reduced OCR noise and errors, preserving valid cognate pairs while preventing format drift that would hinder downstream parsing.
 These directives, together with a number of examples and some input and output definitions, allowed me to automate most of the manual work that the data needed in order to be ready to use.
 
-\subsection{Brute-Force Cognate Extraction}
+\subsection{Brute-Force Cognate Extraction} \label{sec:bruteforce-cognates}
 
 To enlarge the dataset, I implemented and applied a brute-force, syllabogram-aware matcher over a large Greek lexicon (composed by the Iliad and Odyssey).
 Greek forms were first normalized (diacritics removed, lowercased) and then latinized via a direct character map aligned to Linear B conventions (e.g., \textgreek{ξ} $\rightarrow$ \textit{ks}); 
@@ -481,7 +481,7 @@ In this framework, the latent variable $\mathcal{F}$ captures the alignment betw
 However, directly optimizing the joint probability is infeasible, as it requires summing over all possible values of $\mathcal{F}$.
 To overcome this issue, Luo adopted an Expectation-Maximization (EM) iterative training algorithm: the neural model is trained in the M-step to maximize the likelihood of $\prod_{y_j\in \mathcal{Y}} \mathbf{P}(y_j \mid \mathcal{X}, \mathcal{F})$ given fixed $\mathcal{F}$, while in the E-step $\mathcal{F}$ is estimated via a minimum-cost flow problem defined over the trained neural network.
 
-\subsection{NeuroDecipher Model}
+\subsection{NeuroDecipher Model} \label{sec:neurodecipher}
 The neural model $\mathbf{P}_{\theta}(y_j \mid x_i)$, named NeuroDecipher, is based on a standard seq2seq architecture.
 The three main components of the model are the encoder, the decoder, and the attention mechanism.
 
@@ -927,7 +927,7 @@ The results are presented in the tables below.
 \caption{Performance (Train/Validation/Test) on our dataset.}
 \end{table}
 
-This significant drop in the custom-initialized runs is consistent with a loss–accuracy divergence caused by a representation mismatch.
+This significant drop in the custom-initialized runs is consistent with a loss-accuracy divergence caused by a representation mismatch.
 FastText injects word-level semantic priors into a character-mapping task.
 As a result, the model becomes confidently wrong on many instances: the negative log-likelihood can keep improving (higher confidence), while accuracy on held-out data declines (worse argmax decisions).
 In short, the initialization biases the decoder toward signals that are orthogonal to the target grapheme-level correspondences, leading to miscalibration and poorer generalization, due to representational mismatch.

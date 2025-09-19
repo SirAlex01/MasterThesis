@@ -21,4 +21,7 @@
 *.fls
 *.synctex.gz
 *.pdf
+*.bcf
+*.bst
+*.layout
 !thesis.pdf

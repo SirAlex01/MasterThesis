@@ -1,2 +1,246 @@
-\chapter{Auxialiary Classifiers}
-PALLE
+\chapter{Auxiliary Classifiers} \label{chap:classifiers}
+To strengthen cognate predictions within the translation pipeline, I introduced a set of auxiliary tasks that supply syntactic and morphological cues. These tasks are:
+\begin{enumerate}
+    \item Part of speech detection
+    \item Noun type classification (restricted to nouns and adjectives)
+    \item Inflection detection
+\end{enumerate}
+They were chosen because they encode information that helps constrain the space of plausible Greek correspondences (and downstream meanings), especially under low-resource conditions. A separate classifier was trained for each task.
+
+\section{Dataset Creation}
+The dataset for these auxiliary tasks was assembled via prompt engineering with Gemini~2.0~Flash. It includes 3162 sampled words; a small subset carries partial labels (available for only one of the tasks).
+
+The principal sources were:
+\begin{itemize}
+    \item Our cognate dataset, which provides proposed Ancient Greek correspondences from which labels can be inferred;
+    \item Ventris and Chadwick's notes \cite{chadwick-notes}, which also contain usable labels.
+\end{itemize}
+
+The prompts were XML-structured on input and constrained to strict JSON on output. The key prompt components were:
+\begin{itemize}
+    \item \textbf{Task definitions and label sets:} clear label spaces for word type, part of speech, and inflection, with explicit instructions for edge cases.
+    \item \textbf{Declension guidance:} a Linear B attested declension table (Table \ref{table:declension-table}) mapping to Greek first/second/third declensions, to anchor inflection decisions.
+    \item \textbf{Verbal morphology cues:} common endings and diagnostics (e.g., 3\textsuperscript{rd} pl.\ \textit{-si}; participles in \textit{-me-no/-me-na}; infinitival patterns with final \textit{-e}).
+    \item \textbf{Adjectival behavior:} adjectives follow the same inflectional classes as nouns (thematic in \textit{-o}, thematic in \textit{-a}, athematic).
+    \item \textbf{Affixes to ignore in analysis:} \textit{-qe} (conj. "and"), \textit{-te} (ablatival), \textit{-de} (allative/demonstrative or negative prefix, context-dependent), \textit{-pi} (instrumental/locative); the classifier should label the base form without these.
+    \item \textbf{Consistency checks:} automatic sanity checks (e.g., verbs/adverbs must have $\text{inflection}= -1$, inflection must match endings and be compatible with the proposed cognates).
+\end{itemize}
+
+\begin{table}[h!]
+\centering
+\caption{Linear B declensional endings attested in the corpus (mapped to Greek classes). The first two columns correspond to Greek second declension, the next two to first declension, and the last two to third declension. Adjectives follow the same patterns (first/second vs.\ third).}
+\label{table:declension-table}
+\renewcommand{\arraystretch}{1.15}
+\begin{adjustbox}{center,max width=\textwidth}
+\begin{tabular}{|l|l|c|c|c|c|c|c|}
+\hline
+\textbf{Number} & \textbf{Case}
+& \shortstack{\textbf{Thematic}\\\textbf{\textit{-o} (M.)}}
+& \shortstack{\textbf{Thematic}\\\textbf{\textit{-o} (N.)}}
+& \shortstack{\textbf{Thematic}\\\textbf{\textit{-a} (M.)}}
+& \shortstack{\textbf{Thematic}\\\textbf{\textit{-a} (F.)}}
+& \shortstack{\textbf{Athematic}\\\textbf{(M./F.)}}
+& \shortstack{\textbf{Athematic}\\\textbf{(N.)}} \\
+\hline
+Sing. & Nom. & \textit{-o} & \textit{-o} & \textit{-a} & \textit{-a} & variable & variable \\
+Sing. & Gen. & \textit{-ojo} & \textit{-ojo} & \textit{-ao} & \textit{-a} & \textit{-o} & \textit{-o} \\
+Sing. & Dat. & \textit{-o} & \textit{-o} & \textit{-a} & \textit{-a} & \textit{-e}/\textit{-i} & \textit{-e}/\textit{-i} \\
+Sing. & Acc. & \textit{-o} & \textit{-o} & \textit{-a} & \textit{-a} & \textit{-a} & variable (often = Nom.) \\
+\hline
+Plur. & Nom. & \textit{-o}/\textit{-oi} & \textit{-a} & \textit{-a} & \textit{-a} & \textit{-e} & \textit{-a} \\
+Plur. & Gen. & \textit{-o} & \textit{-o} & \textit{-ao} & \textit{-ao} & \textit{-o} & \textit{-o} \\
+Plur. & Dat. & \textit{-oi} & \textit{-oi} & \textit{-ai} & \textit{-ai} & \textit{-si}/\textit{-ti} & \textit{-si}/\textit{-ti} \\
+Plur. & Acc. & \textit{-o} & \textit{-a} & \textit{-a} & \textit{-a} & \textit{-a}/\textit{-e} & \textit{-a} \\
+\hline
+\end{tabular}
+\end{adjustbox}
+
+\small\emph{Note.} Linear B orthography is syllabic: these endings appear within syllabic constraints and can be preceded by arbitrary consonants.
+\end{table}
+In order to enforce determinism, I set a low temperature and greedy decoding ($\text{temperature}= 0$; $\text{top-k}= 1$), so that labeling is repeatable.
+
+The full prompt code and the resulting dataset are available in the source code repository.
+The CSV file containing the dataset has fields:
+\begin{verbatim}
+linear_b,word_type,part_of_speech,inflection,confidence,reasoning
+\end{verbatim}
+
+\section{Task Definitions}
+Each task is a multi-class classification problem, with the following definitions.
+\subsection{Part of Speech detection}
+The part of speech detection task classifies words into the following categories:
+\begin{enumerate}[start=0]
+    \item Noun
+    \item Verb
+    \item Adjective
+    \item Adverb
+\end{enumerate}
+It aims to provide syntactic context that can help disambiguate cognate predictions.
+For example, knowing that a word is a verb narrows down the plausible Greek correspondences and meanings.
+In practice, the classifier relies on surface cues in Linear B (e.g., 3\textsuperscript{rd} plural \textit{-si}; participial endings \textit{-me-no/-me-na}; infinitival patterns with final \textit{-e}), the proposed Greek cognates when available (morphology and lemma semantics), and lexicon notes. By policy, participles are always labeled as adjectives (not verbs). Also, functional suffixes (\textit{-qe}, \textit{-te}, \textit{-de}, \textit{-pi}) are ignored when deciding Part of Speech.
+
+\textit{Examples.}
+\begin{itemize}
+  \item \textlinb{\Be\Bko\Bsi}(e-ko-si) $\rightarrow$ \textgreek{εχουσι} 'they have': the final \textit{-si} is a reliable 3\textsuperscript{rd} plural marker; the item is a verb (part\_of\_speech$=1$; inflection$=-1$).
+  \item \textlinb{\Be\Bko\Bme\Bna}(e-ko-me-na) $\rightarrow$ \textgreek{εχομενα} '(things) being held': the \textit{-me-na} participial ending indicates a  participle, which we treat as an adjective (part\_of\_speech$=2$), not a verb.
+\end{itemize}
+
+\subsection{Noun type classification}
+Noun type classification focuses on distinguishing between different types of nouns and adjectives, based on the same information often provided by the Chadwick and Ventris' notes \cite{chadwick-notes}. The classes are:
+\begin{enumerate}[start=0]
+    \item Proper names (including anthroponyms, theonyms and animal names)
+    \item Toponyms
+    \item Ethnonyms (names of populations)
+    \item Common nouns/adjectives
+\end{enumerate}
+This is the most challenging task.
+Ambiguity between onomastic and common uses, heavy class imbalance (few ethnonyms vs.\ many common items), and context dependence in the tablets all conspire to make boundaries fuzzy.
+Evidence comes from onomastic patterns (e.g., divine titles, personal-name morphology), tablet context, and the semantics of the proposed Greek cognates.
+When a form functions adjectivally but names a deity or place (e.g., divine epithets, demonyms), it is categorized by its onomastic role (theonym, toponym, ethnonym) rather than its syntactic function.
+
+\textit{Examples.}
+\begin{itemize}
+  \item \textlinb{\Bpo\Bti\Bni\Bja}(po-ti-ni-ja) $\rightarrow$ \textgreek{ποτνια} 'mistress, lady (title)': used as a divine title; proper name, theonym (word\_type$=0$).
+  \item \textlinb{\Bpa\Bi\Bto}(pa-i-to) $\rightarrow$ \textgreek{φαιστος} (Phaistos): city name; toponym (word\_type$=1$).
+\end{itemize}
+
+\subsection{Inflection detection}
+Inflection detection classifies nouns and adjectives according to their inflectional class, based on the declensional patterns attested in the Linear B corpus and mapped to Ancient Greek declensions (Table \ref{table:declension-table}). The classes are:
+\begin{enumerate}[start=0]
+    \item Thematic in \textit{-o} (masculine/neuter)
+    \item Thematic in \textit{-a} (feminine/masculine)
+    \item Athematic (feminine/masculine/neuter)
+\end{enumerate}
+This task is also non-trivial, as Linear B endings can overlap across classes: athematic genitive \textit{-o} can mimic thematic patterns, and neuter nominative/accusative \textit{-a} may coincide with thematic \textit{-a}.
+To resolve ties, the classifier cross-checks the Greek cognate's morphological class and expected case/number patterns. Adjectives follow the same inflectional mapping as nouns; participles (treated as adjectives) are assigned to the appropriate class based on their endings.
+This mapping maps directly to Ancient Greek decletions table, where however most Linear B ambiguities are resolved.
+For this reason, also the Ancient Greek cognate is an important information to resolve the ambiguities and correctly classify some dubious words.
+
+\textit{Examples.}
+\begin{itemize}
+  \item \textlinb{\Be\Bre\Bu\Bte\Bro}(e-re-u-te-ro) $\rightarrow$ \textgreek{ελευθερος} 'free': adjective with \textit{-o} pattern;  thematic in \textit{-o} (inflection$=0$).
+  \item \textlinb{\Ba\Bke\Bre\Bu}(a-ke-re-u) $\rightarrow$ \textgreek{ἀγρευς} 'hunter': athematic (inflection$=2$), consistent with the \textit{-eus} class.
+\end{itemize}
+
+\section{Models Comparison}
+My first approach was to tokenize Linear B words into character sequences, embed them, and pass the embeddings to a BiRNN. The idea was inspired by text-infilling with bidirectional RNNs \cite{brnn-paper} and by Luo's bidirectional LSTM (Section \ref{sec:neurodecipher}).
+In practice, this setup trained slowly and struggled to converge to a satisfactory solution.
+
+I therefore switched to a lighter feature-engineering route that reflects the structure of Linear B and plays well with linear classifiers.
+The key is to represent each word simultaneously at the syllabogram level and at the character n-gram level, and then concatenate the two views:
+The feature extraction pipeline is described below:
+\begin{itemize}[leftmargin=2em]
+  \item \textbf{Inputs \& normalization.} Latinized Linear B forms (e.g., \texttt{a-ke-re-u}, \texttt{po-ti-ni-ja}); dashes mark syllabogram boundaries. Keep dashes for syllable features; remove them for character \(n\)-grams.
+  \item \textbf{Syllabogram bag (counts).} \texttt{CountVectorizer} with tokenizer \(\,\lambda.x \mapsto x.\texttt{split}(\texttt{"-"})\,\) to build a bag-of-syllables (\texttt{a}, \texttt{ke}, \texttt{re}, \texttt{u}, \texttt{nwa}, \texttt{phu}); captures sign-level patterns (e.g., \texttt{-me-na}, final \texttt{-o}, titles in \texttt{-ta}).
+  \item \textbf{Character \(n\)-grams (TF-IDF).} \texttt{TfidfVectorizer} with \texttt{analyzer=char}, \(\texttt{ngram\_range}=(2,4)\) on dashless strings; emphasizes short motifs (\texttt{qo}, \texttt{ojo}, \texttt{ph}, \texttt{oi}). These features are concatenated with the syllabogram bag via \texttt{FeatureUnion}.
+  \item \textbf{Output matrix.} Sparse \(X_{\text{features}}\): rows = words; columns = syllabograms \(+\) \(n\)-grams. Suits fast linear models (e.g., \texttt{LinearSVC}); unseen tokens at test time are ignored.
+\end{itemize}
+
+\begin{lstlisting}[language=Python, caption={Syllabogram counts + char \(n\)-gram TF-IDF (concatenated) and transform}, breaklines=true]
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+from sklearn.pipeline import FeatureUnion
+
+features = FeatureUnion([
+    ("syllables", CountVectorizer(
+        tokenizer=lambda x: x.split("-"), token_pattern=None)),
+    ("char_ngrams", TfidfVectorizer(
+        analyzer="char", ngram_range=(2,4),
+        preprocessor=lambda x: x.replace("-", "")))
+])
+
+X_features = features.fit_transform(forms)  # sparse matrix
+\end{lstlisting}
+
+This representation is efficient and effective, as it captures both the syllabic structure of Linear B and the morphological cues encoded in character sequences.
+As a result, it enables fast training and good generalization with most classifiers.
+
+The classifiers compared in my experiments are:
+\begin{itemize}
+    \item \textbf{Logistic Regression} (\texttt{LogisticRegression}): a linear model that estimates class probabilities via the logistic function; suitable for multi-class tasks with regularization.
+    \item \textbf{Random Forest} (\texttt{RandomForestClassifier}): an ensemble of decision trees that aggregates predictions via majority voting; captures non-linear patterns and interactions.
+    \item \textbf{Linear SVM} (\texttt{LinearSVC}): a support vector machine with a linear kernel; effective for high-dimensional sparse data.
+    \item \textbf{Multinomial Naive Bayes} (\texttt{MultinomialNB}): a probabilistic classifier based on Bayes' theorem; assumes feature independence and is efficient for text data.
+    \item \textbf{Histogram-based Gradient Boosting} (\texttt{HistGradientBoostingClassifier}): an efficient implementation of gradient boosting that uses histograms to bin continuous features; handles large datasets well.
+    \item \textbf{Neural Network (MLP)} (\texttt{MLPClassifier}): a feedforward neural network with one hidden layer; capable of learning complex non-linear decision boundaries.
+\end{itemize}
+
+
+The implementation of these classifiers is taken from the \texttt{scikit-learn} library.
+Let us now compare the performance of different classifiers on the three tasks.
+
+\subsection{Results}
+The classifiers were evaluated using 5-fold cross-validation on the dataset of 3162 words.
+
+\paragraph{Part of Speech detection.} The results are summarized in Table \ref{tab:pos-results}.
+\begin{table}[h!]
+\centering
+\caption{5-fold cross-validation results for the Part of Speech task (mean values).}
+\label{tab:pos-results}
+\small
+\renewcommand{\arraystretch}{1.1}
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Model} & \textbf{Accuracy} & \textbf{Macro-F1} \\
+\hline
+Logistic Regression      & \textbf{0.8848} & 0.3826 \\
+Random Forest            & 0.8770          & 0.2745 \\
+\textbf{Linear SVM}      & 0.8845          & \textbf{0.4129} \\
+Multinomial Naive Bayes  & 0.8712          & 0.2439 \\
+HistGradientBoosting     & 0.8777          & 0.3390 \\
+Neural Network (MLP)     & 0.8790          & 0.3022 \\
+\hline
+\end{tabular}
+\end{table}
+
+Logistic Regression attains the highest accuracy, while Linear SVM matches it closely and yields the best Macro-F1, indicating better performance on minority classes.  
+Overall, this task shows the best accuracies across models; however, class imbalance (nouns/adjectives dominate) inflates accuracy, as reflected by the more modest Macro-F1 values.
+
+\paragraph{Noun type classification.} The results are summarized in Table \ref{table:noun-type-results}.
+\begin{table}[h!]
+\centering
+\caption{5-fold cross-validation results for the Noun type classification task (mean).}
+\label{table:noun-type-results}
+\small
+\renewcommand{\arraystretch}{1.1}
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Model} & \textbf{Accuracy} & \textbf{Macro-F1} \\
+\hline
+Logistic Regression      & 0.6341          & 0.4045 \\
+Random Forest            & 0.6015          & 0.2953 \\
+\textbf{Linear SVM}      & \textbf{0.6401} & \textbf{0.4632} \\
+Multinomial Naive Bayes  & 0.6044          & 0.2978 \\
+HistGradientBoosting     & 0.6012          & 0.3841 \\
+Neural Network (MLP)     & 0.6319          & 0.3653 \\
+\hline
+\end{tabular}
+\end{table}
+
+This task is clearly more challenging, with lower overall accuracy.  
+Linear SVM again performs best in both accuracy and Macro-F1, suggesting it handles class imbalance better than the alternatives.
+
+\paragraph{Inflection detection.} The results are summarized in Table \ref{table:inflection-results}.
+\begin{table}[H]
+\centering
+\caption{5-fold cross-validation results for the Inflection detection task (mean values).}
+\label{table:inflection-results}
+\small
+\renewcommand{\arraystretch}{1.1}
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Model} & \textbf{Accuracy} & \textbf{Macro-F1} \\
+\hline
+Logistic Regression      & 0.8097          & 0.7755 \\
+Random Forest            & 0.7405          & 0.6836 \\
+\textbf{Linear SVM}      & \textbf{0.8372} & \textbf{0.8072} \\
+Multinomial Naive Bayes  & 0.7298          & 0.6690 \\
+HistGradientBoosting     & 0.7855          & 0.7443 \\
+Neural Network (MLP)     & 0.7993          & 0.7611 \\
+\hline
+\end{tabular}
+\end{table}
+
+Linear SVM achieves the best accuracy and Macro-F1, with Logistic Regression and the MLP close behind, while tree-based models and Naive Bayes lag in Macro-F1.  
+Overall, inflection detection is easier than noun-type classification and Linear SVM performs very strongly.  
+Note that one of the classes is under-represented, the athematic class, which can affect Macro-F1 despite high overall accuracy.
+
