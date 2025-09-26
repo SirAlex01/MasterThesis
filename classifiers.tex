@@ -7,7 +7,7 @@ To strengthen cognate predictions within the translation pipeline, I introduced 
 \end{enumerate}
 They were chosen because they encode information that helps constrain the space of plausible Greek correspondences (and downstream meanings), especially under low-resource conditions. A separate classifier was trained for each task.
 
-\section{Dataset Creation}
+\section{Dataset Creation} \label{sec:aux-dataset}
 The dataset for these auxiliary tasks was assembled via prompt engineering with Gemini~2.0~Flash. It includes 3162 sampled words; a small subset carries partial labels (available for only one of the tasks).
 
 The principal sources were:
@@ -129,7 +129,7 @@ In practice, this setup trained slowly and struggled to converge to a satisfacto
 I therefore switched to a lighter feature-engineering route that reflects the structure of Linear B and plays well with linear classifiers.
 The key is to represent each word simultaneously at the syllabogram level and at the character n-gram level, and then concatenate the two views:
 The feature extraction pipeline is described below:
-\begin{itemize}[leftmargin=2em]
+\begin{itemize}
   \item \textbf{Inputs \& normalization.} Latinized Linear B forms (e.g., \texttt{a-ke-re-u}, \texttt{po-ti-ni-ja}); dashes mark syllabogram boundaries. Keep dashes for syllable features; remove them for character \(n\)-grams.
   \item \textbf{Syllabogram bag (counts).} \texttt{CountVectorizer} with tokenizer \(\,\lambda.x \mapsto x.\texttt{split}(\texttt{"-"})\,\) to build a bag-of-syllables (\texttt{a}, \texttt{ke}, \texttt{re}, \texttt{u}, \texttt{nwa}, \texttt{phu}); captures sign-level patterns (e.g., \texttt{-me-na}, final \texttt{-o}, titles in \texttt{-ta}).
   \item \textbf{Character \(n\)-grams (TF-IDF).} \texttt{TfidfVectorizer} with \texttt{analyzer=char}, \(\texttt{ngram\_range}=(2,4)\) on dashless strings; emphasizes short motifs (\texttt{qo}, \texttt{ojo}, \texttt{ph}, \texttt{oi}). These features are concatenated with the syllabogram bag via \texttt{FeatureUnion}.

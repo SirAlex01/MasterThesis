@@ -14,9 +14,7 @@ Chapter \ref{chap:cognates} develops cognate matching, a core ingredient in comp
 
 Chapter \ref{chap:classifiers} presents the auxiliary tasks devised for this work and their models (part of speech detection, noun type classification, and inflection detection) together with the feature representations, training setup, and evaluation.
 
-...
-PALLE PALLE
-... 
+Chapter \ref{chap:pipeline} describes the full translation pipeline, explaining how to combine the cognate matching outputs and auxiliary predictions into a structured prompt for a large language model (LLM). The prompt design and the LLM's performance are discussed in detail.
 
 \section{Data Collection}
 The data used in this work has been collected separately for Linear A, Linear B, and Ancient Greek.
@@ -42,9 +40,9 @@ Together with the fragments, site and document-level metadata were organized int
     \item \textbf{Depth (cm)}: Thickness in centimetres (cm).
 \end{itemize}
 
-\noindent\emph{Notes.} Missing values are left empty as in the source. Dimensions refer to the preserved object and follow  SigLA’s measurements (decimal separator “.”).
+\noindent\emph{Notes.} Missing values are left empty as in the source. Dimensions refer to the preserved object and follow  SigLA's measurements (decimal separator ".").
 
-SigLA provides two parallel segmentations of each document: (i) a sign-by-sign view and (ii) a word/sequence view. The word view is not fully comprehensive: some isolated symbols are omitted and therefore never appear in the “words” export. For this reason, I keep the original sign segmentation as the authoritative layer, and use the word/sequence file to reconstruct identified sequences.
+SigLA provides two parallel segmentations of each document: (i) a sign-by-sign view and (ii) a word/sequence view. The word view is not fully comprehensive: some isolated symbols are omitted and therefore never appear in the "words" export. For this reason, I keep the original sign segmentation as the authoritative layer, and use the word/sequence file to reconstruct identified sequences.
 
 \paragraph{Signs CSV (per-sign records).}
 Additional columns:
@@ -151,7 +149,7 @@ In the realm of computational decipherment, the most relevant prior work consist
 Notably, in both cases the models used to encode Linear B sequences are based on bidirectional recurrent neural networks (BRNNs), which are also used in this work.  
 For the text infilling task, I also assessed the effectiveness of transformer-based architectures, noting a significant drop in performance compared to RNNs, mostly due to the scarcity of training data. 
 
-Lastly, the prompt-engineering approach to translation and reconstruction is inspired by the advantages of large language models (LLMs) and their demonstrated ability to understand and translate Ancient Greek.  
+Lastly, the prompt-engineering approach to translation and reconstruction is inspired by the advantages of large language models and their demonstrated ability to understand and translate Ancient Greek.  
 By supplying the information that is strictly necessary for translation and reconstruction, the Linear B corpus can be automatically translated into English.
 
 \subsection{Cognate Matching and Manual Decipherment}
@@ -160,7 +158,7 @@ Ventris and Chadwick themselves relied on simple cognate identification at the s
 Automating cognate detection is a crucial step toward scaling decipherment efforts to larger corpora and more complex scripts.  
 Luo proposed a language-agnostic neural model for cognate matching, which I tested and extended in this thesis (Section \ref{sec:generative-framework}).
 
-The models’ output was used to generate a list of candidate cognate pairs, which were provided as input to an LLM.  
+The model's output was used to generate a list of candidate cognate pairs, which were provided as input to an LLM.  
 Alongside these, I supplied additional linguistic information useful for grammatical, logical, and syntactical analysis.  
 The LLM was then prompted to produce an Ancient Greek reconstruction and translate it into English, using structured processing instructions, typical of manual decipherment, and a few examples.  
 The steps of this process are described in detail in Section \ref{sec:final-prompt}.
