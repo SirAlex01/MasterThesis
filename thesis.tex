@@ -51,7 +51,7 @@
 \course{Engineering in Computer Science}
 \courseorganizer{Facoltà di Ingegneria dell'Informazione, Informatica e Statistica}
 \AcademicYear{2024/2025}
-\advisor{Prof. Aristidis Anagnostopoulos}
+\advisor{Prof. Aris Anagnostopoulos}
 \authoremail{maiola.1933744@studenti.uniroma1.it}
 \copyyear{2025}
 \thesistype{Master Thesis}
@@ -90,20 +90,33 @@
 
 
 \begin{acknowledgments}
-
+Voglio ringraziare tutte le persone che mi hanno supportato nel corso di questo progetto di tesi. \\
+In particolare, il mio relatore Prof. Aris Anagnostopoulos per la sua guida e i suoi preziosi consigli. \\
+Vorrei anche ringraziare i miei genitori, che mi hanno sempre incoraggiato a perseguire i miei interessi accademici. \\
+Pur scettici di fronte alla complessità del tema, mi hanno sempre sostenuto e motivato a dare il meglio. \\
+Vorrei ringraziare mio fratello, Emanuele, per ricordarmi di conoscere pur sempre il greco meglio di me, anche se non è vero. \\
+Grazie ai miei nonni, che mi hanno sempre ispirato con la loro saggezza e il loro amore per la conoscenza. \\
+Infine, un ringraziamento speciale va ai miei amici e colleghi. \\
+Un grazie a Penelope, per aver contribuito al mio amore per il tema della tesi. \\
+Grazie a Ludovica, Ilaria, Francesco e tutti gli altri per il supporto morale e le risate condivise durante questo percorso. \\
+Grazie a QXIII per i momenti di svago e relax, che mi hanno permesso di ricaricare le energie. \\
+Grazie a Marilena per avermi supportato e sopportato nei numerosi momenti di difficoltà incontrati. \\
+Grazie a Gabriele, per avermi accompagnato in questo viaggio accademico e per il suo aiuto prezioso. \\
+Grazie ai ragazzi di CyberChallenge.IT per avermi fatto scoprire un'altra passione, che mi ha aiutato a sviluppare capacità utili anche per questo progetto. \\
+Infine un ringraziamento speciale al Prof. Tullio, per avermi introdotto al mondo della Grecia Antica e per avermi trasmesso la passione per questa materia.
 \end{acknowledgments}
 
 
 \begin{abstract}
 This thesis tests whether large language models (LLMs) can assist in translating Linear B administrative texts into Ancient Greek and English.
-I build a compact \emph{Translation Pipeline} that couples brute-force cognate search with candidate aggregation, Linear-SVM auxiliary classifiers (part of speech, noun type, inflection), explicit handling of logograms/abbreviations, and structured multi-message prompting. Alongside the engineering, the thesis surveys the Aegean scripts (historical context, sites, linguistic features, and the decipherment of Linear B), details data collection (Linear A fragments, Linear B documents, Ancient Greek resources), and situates the approach within prior work on cognate matching and manual decipherment.
+I have built a compact \emph{Translation Pipeline} that couples brute-force cognate search with candidate aggregation, Linear-SVM auxiliary classifiers (part of speech, noun type, inflection), explicit handling of logograms/abbreviations, and structured multi-message prompting. Alongside the engineering, the thesis surveys the Aegean scripts (historical context, sites, linguistic features, and the decipherment of Linear B), details data collection (Linear A fragments, Linear B documents, Ancient Greek resources), and situates the approach within prior work on cognate matching and manual decipherment.
 
-For cognates, I employed the generative \emph{NeuroDecipher} framework from Jiaming Luo and a brute-force extraction pass; for disambiguation, I add auxiliary labels and table-driven guidance.
+For cognates, I employed the generative \emph{NeuroDecipher} framework from Jiaming Luo and a brute-force extraction pass; for disambiguation, I have added auxiliary labels and table-driven guidance.
 Using Gemini~2.5~Flash, the system reconstructs plausible Ancient Greek forms and produces English translations for full tablets.
-Evaluation against translations from Tselentis’ lexicon shows that automated translation is feasible: list-like inventories and administrative formulae are consistently recovered, vocabulary stays domain-appropriate, and English readings preserve the intended sense. An error taxonomy emerges: (i) weak/misleading cognates, (ii) case/number misassignment in context-poor lines, (iii) grammatical function errors from misclassification, and (iv) occasional logogram mishandling.
+Evaluation against translations from Tselentis' lexicon shows that automated translation is feasible: list-like inventories and administrative formulae are consistently recovered, vocabulary stays domain-appropriate, and English readings preserve the intended sense. An error taxonomy emerges: (i) weak/misleading cognates, (ii) case/number misassignment in context-poor lines, (iii) grammatical function errors from misclassification, and (iv) occasional logogram mishandling.
 Greek reconstructions sometimes retain Mycenaean features, but these rarely obscure meaning.
 
-I release code and data and outline concrete next steps: hand-curating auxiliary labels, enriching the logogram lexicon, adding a normalization stage toward Classical Greek, fine-tuning on expert-validated pairs, broader evaluation, and cross-script generalization (e.g., Cypriot syllabary vs. alphabetic Greek).
+I have released code and data and outline concrete next steps: hand-curating auxiliary labels, enriching the logogram lexicon, adding a normalization stage toward Classical Greek, fine-tuning on expert-validated pairs, broader evaluation, and cross-script generalization (e.g., Cypriot syllabary vs. alphabetic Greek).
 
 \end{abstract}
 
