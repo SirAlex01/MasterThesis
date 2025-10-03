@@ -1,0 +1,49 @@
+\chapter{Conclusions and Future Work} \label{chap:conclusion}
+
+\section{Conclusion}
+Overall, the analysis of the errors made by the LLM in interpreting the selected Linear B documents demonstrates that automated translation is indeed feasible. The most important elements of the tablets are generally identified and rendered correctly, especially when the documents exhibit regular, list-like structures and well-attested administrative formulas.
+Across the analyzed documents, the model typically reconstructs the local context, constrains its lexical choices to domain-appropriate vocabulary, and produces English glosses that capture the intended sense.
+
+That said, some sources of error are inherent to the writing system.
+The tablets are highly contracted and context-poor; many entries admit multiple plausible interpretations.
+As outlined in Section \ref{sec:errors}, the most frequent failure mode is the misinterpretation of grammatical case or number, often triggered by overlapping Linear B endings and sparse syntactic cues.
+Additional errors arise when auxiliary classifiers mislabel the function of a form or when logograms and abbreviations are only partially disambiguated.
+
+A further systematic issue concerns the Ancient Greek reconstructions.
+The LLM often retains Mycenaean features (e.g., persistent \textgreek{ϝ}, Mycenaean endings), which makes some outputs less than fully classical.
+Crucially, however, these deviations rarely obscure the core semantics.
+The English translations, the ultimate target for accessibility and cross-document comparison, remain largely accurate even when the Greek layer is not perfectly normalized.
+In this sense, the pipeline already serves as a practical aid: it accelerates first-pass interpretation, surfaces consistent readings for recurring formulas, and makes tablets more accessible to readers without specialist training in Mycenaean Greek or Linear B paleography.
+At the outset of this project, a tool of this kind would have significantly accelerated my own work by providing reliable preliminary translations to inspect and refine.
+
+In conclusion, while there is clear room for improvement, particularly in normalizing Greek forms toward Classical conventions, strengthening grammatical disambiguation, and refining logogram handling, the LLM-based system demonstrates substantial promise.
+It delivers dependable, high-coverage drafts that scholars can validate and adjust, supports hypothesis generation about uncertain forms, and lowers the entry barrier for broader audiences.
+With incremental enhancements to auxiliary signals and normalization, the approach can mature into a robust companion for philological analysis and digital editions of Linear B texts.
+
+\section{Future Work}
+
+Building on the encouraging results of this initial exploration, several avenues for future work emerge.
+Expanding the auxiliary classifiers to cover additional grammatical categories (e.g., tense, mood, and voice for verbs; degree for adjectives; case, number, and gender for nouns and adjectives) could help the LLM better disambiguate forms with overlapping endings.
+The classifier datasets could be manually reviewed and corrected to improve accuracy, since they were synthesized via automated prompt-engineering (Section~\ref{sec:aux-dataset}).
+Because these labels guide the LLM's choices, improving them should propagate to more reliable reconstructions.
+Similarly, enhancing the disambiguation of logographic abbreviations with a more comprehensive, context-aware lexicon could further improve the model's performance.
+
+Other potential improvements include:
+\begin{itemize}
+\item \textbf{Domain adaptation and fine-tuning.} Fine-tune the LLM on a curated corpus of Linear B texts paired with expert-validated Greek and English translations to internalize domain-specific formulae and genre constraints while reducing over-generalization from non-administrative Greek.
+
+\item \textbf{Normalization toward Classical Greek.} Add a dedicated normalization stage that maps Mycenaean-like outputs to Classical morphology and orthography, implemented either as a post-processing transducer constrained by paradigms or as a jointly trained module with soft constraints for the suppression of \textgreek{ϝ} and alignment to Classical endings.  
+
+\item \textbf{Richer cognate modeling.} Evolve the Cognate Matching model and framework by incorporating explicit phonological and inflection-aware correspondences.
+
+\item \textbf{Better handling of logograms and abbreviations.} Expand the logogram lexicon with contextual priors (e.g., commodity-unit co-occurrence, site-specific practices), and integrate a small decision model that prefers readings consistent with neighboring quantities and roles.  
+
+\item \textbf{Cross-script generalization.} Experiment with related scenarios where closely related languages are encoded in different scripts (e.g., Cypriot syllabary and alphabetic Greek) to test the portability of the pipeline beyond Linear B.  
+\end{itemize}
+
+Finally, a more systematic evaluation over a larger and more diverse set of Linear B documents would better quantify strengths and weaknesses and guide refinement.
+The same methodology could then be extended to other ancient languages and scripts, testing the generalizability of the approach.
+
+All data and code used in this thesis are available on GitHub at \url{https://github.com/SirAlex01/LALB-DM-Project}.
+
+Open sourcing any Linear B resources is particularly important, given the scarcity of digital tools for this script and the limited accessibility of many primary sources.

@@ -25,3 +25,4 @@
 *.bst
 *.layout
 !thesis.pdf
+!cover.pdf

@@ -14,7 +14,7 @@ The full pipeline proceeds as follows:
 
 \begin{figure}[H]
     \begin{adjustbox}{center}
-        \includegraphics[width=1.2\textwidth]{images/pipeline.png}
+        \includegraphics[width=1.2\textwidth]{Images/pipeline.png}
     \end{adjustbox}
     \caption{Overview of the translation pipeline from Linear B to Ancient Greek.}
     \label{fig:pipeline}
@@ -23,21 +23,21 @@ The full pipeline proceeds as follows:
 \section{Prompt Design} \label{sec:final-prompt}
 This time, instead of a single prompt, the information was given to the large language model using a series of structured messages, each with a specific role.
 
-\paragraph{Historical Context}
+\paragraph{Historical Context.}
 The first message provided to the model was a simple historical context on Linear B and Ancient Greek relationship.
 It underlines the fact that Linear B is an early form of Greek, written with a syllabic script, and its administrative nature.
 This message was fixed for all words.
 
-\paragraph{Syllabogram Matching}
+\paragraph{Syllabogram Matching.}
 The second message contained the Linear B syllabograms and their closest Ancient Greek equivalents, predicted by Luo's model.
 It associates to each Linear B syllabogram a list of symbols that could represent it in its Ancient Greek correspondence.
 For example, the Linear B syllabogram \textlinb{\Bpa} (pa) is associated with the Ancient Greek letters \textgreek{π}, \textgreek{φ}, and \textgreek{α}, as it usually corresponds to "\textgreek{πα}" or "\textgreek{φα}" syllables.
 This was also fixed for all words.
 
-\paragraph{Grammatical Information}
+\paragraph{Grammatical Information.}
 The third message provided auxiliary grammatical information, such as Linear B declension tables, and additional information about adjectives and verbs, like in the prompt described in Section \ref{sec:aux-dataset}.
 
-\paragraph{Task Definition}
+\paragraph{Task Definition.}
 The fourth message formalizes the task. The model receives the Linear~B document as a sequence of tokenized word forms; for each word it is given (i) the aggregated set of candidate Ancient Greek cognates, (ii) auxiliary predictions (part of speech, noun type when applicable, and inflection when applicable), and (iii) a completeness label.
 The completeness label is derived from the share $p\!\in\![0,1]$ of occurrences marked as "complete" in the corpus and is bucketed at fixed cutoffs:
 \emph{Always Complete} ($p=1$), \emph{Mostly Complete} ($p \geq \frac{2}{3}$), \emph{Uncertain} ($\frac{1}{3} < p < \frac{2}{3}$), \emph{Mostly Incomplete} ($0< p \leq \frac{1}{3}$), \emph{Incomplete} ($p=0$).
@@ -54,7 +54,7 @@ The prompt instructs the model on how to complete the translation task, the main
 These are common steps in translation and linguistic analysis, but they are particularly important in this context due to the similarity between Linear B inflected forms.
 The LLM is finally asked given some quality assurance criteria, reflecting the needs of the task, and instructed to use the chain-of-thought technique to reason step by step and refine its translation.
 
-\paragraph{Examples}
+\paragraph{Examples.}
 The last information given to the model is a series of examples of translated Linear B fragments.
 These examples are selected from a small set of documents provided by Chris Tselentis, together with his Linear B lexicon \cite{tselentis}.
 
@@ -190,9 +190,9 @@ The English translation is also accurate, therefore no changes are needed.
   \label{fig:doc2}
 \end{figure}
 
-\subsubsection{PY Jn 310}
+\subsubsection{PY Jn 310} \label{doc:pyjn310}
 Tselentis provides a translation for only a fragment of this document, which is quite long.
-However, the LLM appears able to handle the entire text quite well, thanks to its repetitive structure. \\
+However, the LLM appears able to handle the entire text well, thanks to its repetitive structure. \\
 \textbf{Linear B text}: a-ke-re-wa [...] ka-ke-we ta-ra-si-ja e-ko-te ti-qa-jo AES M 1 N 2 qe-ta-wo AES M 1 N 2 ai-so-ni-jo AES M 1 N 2 ta-mi-je-u AES M 1 N 2 e-u-ru-wo-ta AES M 1 N 2 e-u-do-no AES M 1 N 2 po-ro-u-te-u AES M 1 N 2 wi-du-wa-ko AES M 1 N 2 to-so-de a-ta-ra-si-jo ka-ke-we [...] pa-qo-si-jo 1 ke-we-to 1 [...] 1 [...] pe-ta-ro 1 to-so-de do-e-ro ke-we-to-jo 1 i-wa-ka-o 1 pa-qo-si-jo-jo 1 po-ro-u-te-wo 1 a [...] \textit{po-ti-ni-ja-we-jo ka-ke-we ta-ra-si-ja e-ko-te} i-ma-di-jo [...] AES M 3 tu-ke-ne-u AES M 3 AES M 3 i-wa-ka AES M 3 a-ta-ra-si-jo phu-si-ja-ko 1 \\
 \textbf{Greek translation}: \textgreek{Ἀγρεϝα [...] χαλκεϝες ταλανσία ἔχοντες: Τιθαιος ΧΑΛΚΟΣ M 1 N 2, Κεταϝος ΧΑΛΚΟΣ M 1 N 2, Αἰσώνιος ΧΑΛΚΟΣ M 1 N 2, Ταμιεύς ΧΑΛΚΟΣ M 1 N 2, Εὐρυϝότας ΧΑΛΚΟΣ M 1 N 2, Εὔδονος ΧΑΛΚΟΣ M 1 N 2, Πλουτεύς ΧΑΛΚΟΣ M 1 N 2, Ϝιδυϝακος ΧΑΛΚΟΣ M 1 N 2. Τόσοςδε ἀταλανσίοι χαλκεϝες [...]: Παμφίσιος 1, Κηϝετος 1, [...] 1, [...] 1, Πέταλος 1. Τόσοςδε δοῦλοι: Κηϝετοιο 1, Ἰϝακαο 1, Παμφισίοιο 1, Πλουτέϝος 1. Ἀ [...] Ποτνιάϝειοι χαλκεϝες ταλανσία ἔχοντες: Ἱμαδιος [...] ΧΑΛΚΟΣ M 3, Τυχενεύς ΧΑΛΚΟΣ M 3, ΧΑΛΚΟΣ M 3, Ἰϝακα ΧΑΛΚΟΣ M 3. Ἀταλανσίοι: Φυσίαρχος 1.} \\
 \textbf{English translation}: Agrewa: [...] bronze-smiths having allotment: Tithaios: BRONZE M 1 N 2, Ketawo: BRONZE M 1 N 2, Aisonios: BRONZE M 1 N 2, Tamieus: BRONZE M 1 N 2, Eurywotas: BRONZE M 1 N 2, Eudonos: BRONZE M 1 N 2, Plouteus: BRONZE M 1 N 2, Widuwako: BRONZE M 1 N 2. Total bronze-smiths without allotment [...]: Pamphisios 1, Kewetos 1, [...] 1, [...] 1, Petalos 1. Total slaves: Of Kewetos 1, Of Iwaka 1, Of Pamphisios 1, Of Plouteus 1. A [...] Potnia-related bronze-smiths having allotment: Himadios [...] BRONZE M 3, Tucheneus: BRONZE M 3, BRONZE M 3, Iwaka: BRONZE M 3. Without allotment: Physiarchos 1.
@@ -232,7 +232,7 @@ This document records the quantities of bronze collected for a temple and for th
 The opening clause names the givers and states the purpose of the collection.
 The remainder lists the amounts of bronze associated with various mayors and deputy mayors.
 Because the closing portion is long and highly repetitive, I exclude it from the analysis.
-Tselentis’ translation covers only part of the opening sentence. \\
+Tselentis' translation covers only part of the opening sentence. \\
 \textbf{Linear B text}: jo-do-so-si ko-re-te-re du-ma-te-qe po-ro-ko-re-te-re-qe ka-ra-wi-po-ro-qe o-pi-su-ko-qe o-pi-ka-pe-e-we-qe \textit{ka-ko na-wi-jo pa-ta-jo-i-qe e-ke-si-qe ai-ka-sa-ma} pi-*82 ko-re-te AES M 2 po-ro-ko-re-te AES N 3 me-ta-pa ko-re-te AES M 2 po-ro-ko-re-te AES N 3 [...] \\
 \textbf{Greek translation}: \textgreek{Ὡς δώσουσι κορητῆρες δῠμᾶτές τε προκορητῆρές τε κλαϝιφόροί τε ὀπίσυκοί τε ὀπικαπεῆϝές τε χαλκόν ναϝίον, παλταίοις τε ἔχεσσι τε αἰχμάς. Πίσαϝι: κορητήρ ΧΑΛΚΟΣ M 2, προκορητήρ ΧΑΛΚΟΣ N 3. Μετάπα: κορητήρ ΧΑΛΚΟΣ M 2, προκορητήρ ΧΑΛΚΟΣ N 3.} \\
 \textbf{English translation}: Thus will give the mayors and magistrates and deputy mayors and key-bearers and overseers of figs and overseers of digging, temple bronze, and spearheads for the javelin-men and for the spears. Pisa: mayor, bronze M 2, deputy mayor, bronze N 3. Metapa: mayor, bronze M 2, deputy mayor, bronze N 3. 
@@ -267,12 +267,12 @@ Here I report an improved version of the translations, highlighting in red the a
   \label{fig:doc4}
 \end{figure}
 
-\subsubsection{KN So 4439}
-This very short document is an inventory for wheels.
-Despite its brevity, it is actually one of the most challenging documents, due to the presence of misleading words.
+\subsubsection{KN So 4439} \label{doc:knso4439}
+This very short document is an inventory of wheels.
+Despite its brevity, it is actually one of the most challenging documents due to the presence of misleading words.
 Tselentis provides the translation for the entire document. \\
 \textbf{Linear B text}: \textit{a-mo-ta e-ri-ka te-mi-dwe-ta ROTA ZE 3 MO ROTA 1} \\
-\textbf{Greek translation}: \textgreek{ἁρμότα ἑλίκαι τερμιδfέντα: τροχοί ζεύγη 3, μόνος τροχός 1.} \\
+\textbf{Greek translation}: \textgreek{ἁρμότα ἑλίκαι τερμιδϝέντα: τροχοί ζεύγη 3, μόνος τροχός 1.} \\
 \textbf{English translation}: Chariot fittings, willow (wood), rimmed: 3 pairs of wheels, 1 single wheel.
 
 \paragraph{Analysis.}
@@ -299,10 +299,10 @@ Here I report an improved version of the translations, highlighting in red the a
 
 \subsubsection{KN Sd 4404}
 This document is another inventory, this time for chariots.
-Due to its fragmentary state, reconstructing its content is quite challenging.
+Due to its fragmentary state, reconstructing its content is challenging.
 Tselentis provides a translation for only the last fragment of the document. \\
 \textbf{Linear B text}: jo [...] i-qo-e-qe wi-ri-ni-jo o-po-qo ke-ra-ja-pi o-pi-i-ja-pi CUR [...] \textit{i-qi-ja [...] ku-do-ni-ja mi-to-we-sa-e a-ra-ro-mo-te-me-na} po-ni-ki-ja BIG 1 \\
-\textbf{Greek translation}: \textgreek{[...], ἱππο-ε-κες τε fίρινιοι ὀπωπω κεραίαφι ὀπίαιφι ΔΙΦΡΟΣ. [...] ἱππία Κυδωνία μιλτόfεσσα ἀραρμοτhεμένη φοινικία ΔΙΦΡΟΣ 1.} \\
+\textbf{Greek translation}: \textgreek{[...], ἱππο-ε-κες τε ϝίρινιοι ὀπωπω κεραίαφι ὀπίαιφι ΔΙΦΡΟΣ. [...] ἱππία Κυδωνία μιλτόϝεσσα ἀραρμοτhεμένη φοινικία ΔΙΦΡΟΣ 1.} \\
 \textbf{English translation}: [...], and horse-equipped (parts), leathern eye-guards, with horn-like parts, with reins, a chariot. [...] A Cydonian, red-painted, fitted, red-dyed chariot: 1 chariot.
 
 \paragraph{Analysis.}
@@ -313,30 +313,138 @@ The main terms in this document are:
   It presents a strange \textit{-e} ending, and is interpreted as "horse-equipped parts", despite the fact that \textit{-qe} is usually a conjunction meaning "and".
   The peculiar ending might be dual ending, but this is only my speculation.
   \item \textlinb{\Bwi\Bri\Bni\Bo} (wi-ri-ni-jo) derives from \textgreek{ῥινός}, "leather", and it is an adjective associated with \textlinb{\Bo\Bpo\Bqo} (o-po-qo), "eye-guards", from \textgreek{ἐπί} and the root \textgreek{ὀπ-}, linked to sight, as in \textgreek{ὄψις}, "sight".
-  \item \textgreek{κεραίαφι} (ke-ra-ja-pi) and \textgreek{ὀπίαιφι} (o-pi-i-ja-pi) are both in the instrumental terms, as indicated by the suffix \textit{-pi}, and mean "with horn-like parts" and "with reins", from Ancient Greek \textgreek{κέρας} "horn" PALLE PALLE..., respectively.
+  \item \textgreek{κεραίαφι} (ke-ra-ja-pi) and \textgreek{ὀπίαιφι} (o-pi-i-ja-pi) are both in the instrumental terms, as indicated by the suffix \textit{-pi}, and mean "with horn-like parts" and "with reins".
+  The former comes from Ancient Greek \textgreek{κέρας} "horn", while the latter has an uncertain etymology, possibly linked to \textgreek{ἡνία} "reins", combined with the \textgreek{ἐπί} prefix.
+  \item \textlinb{\Bi\Bqi\Ba} (i-qi-ja) is the word for "chariot", from Ancient Greek \textgreek{ἵππια}, adjective related to \textgreek{ἵππος}, "horse".
+  \item Three adjectives describe the chariot: \textlinb{\Bku\Bdo\Bni\Ba} (ku-do-ni-ja) is the toponym "Cydonia", from the ancient city of Cydonia in Crete.
+  \textlinb{\Bmi\Bto\Bwe\Bsa\Be} (mi-to-we-sa-e) and \textlinb{\Bpo\Bni\Bki\Bja} (po-ni-ki-ja) mean "purple red-painted", from Ancient Greek \textgreek{μιλτός}, "red ochre" and \textgreek{φοινίκιος}, "phoenician", respectively. 
+  \textlinb{\Ba\Bra\Bro\Bmo\Bte\Bme\Bna} (a-ra-ro-mo-te-me-na) is the passive participle of \textgreek{ἀρμόζω}, and means "fitted/assembled".
 \end{itemize}
+I provide an improved version of the translations below, highlighting in red the adjustments. \\
+\textbf{Greek translation}: \textgreek{[...],} \textcolor{red}{\textgreek{ἱππω τε ϝρινιοι}} \textgreek{ὀπωπω κεραίαφι ὀπίαιφι ΔΙΦΡΟΣ. [...] ἱππία Κυδωνία μιλτόϝεσσα ἀραρμοτhεμένη φοινικία ΔΙΦΡΟΣ 1.} \\
+\textbf{English translation}: [...], \textcolor{red}{(equipped with) two horses, with} leathern eye-guards, with horn-like parts, with reins, a chariot. [...] A Cydonian, \textcolor{blue}{purple red-painted}, \textcolor{red}{assembled}, chariot: 1 chariot.
 
-\subsubsection{PY An 657}
-PALLE PALLE...
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\textwidth]{Images/454.png} % Adjust width and filename
+  \caption{Picture of the original document KN Sd 4404.}
+  \label{fig:doc6}
+\end{figure}
 
-\subsubsection{PY TA 641}
-This document is a short inventory of vessels, in particular tripods and pithoi (large storage jars).
-The translation provided by Tselentis covers the first portion of the document, while the rest is left untranslated. \\
+\subsubsection{PY An 657} \label{doc:pyan657}
+This document lists various groups of guards and soldiers, together with their numbers, the names of their leaders, and the place of deployment.
+Tselentis provides a translation for a small portion of the text containing the name of an "epetas". \\
 
-\textbf{Linear B text}: \textit{ke-re-ha *201VAS [...] ti-ri-po-de ai-ke-u ke-re-si-jo we-ke *201VAS 2 ti-ri-po e-me po-de o-wo-we *201VAS 1 ti-ri-po ke-re-si-jo we-ke a-pu ke-ka-u-me-no} [...] qe-to *203VAS 3 di-pa me-zo-e qe-to-ro-we *202VAS 1 di-pa-e me-zo-e ti-ri-o-we-e *202VAS 2 di-pa me-wi-jo qe-to-ro-we *202VAS 1 di-pa me-wi-jo ti-ri-jo-we *202VAS 1 di-pa me-wi-jo a-no-we *202VAS 1
-\textbf{Greek translation}: σκελέα *201VAS [...] τρίποδες Αἰγεύς Κρήσιον fέργον *201VAS 2, τρίπους ἐνι ποδεί οfωfεις *201VAS 1, τρίπους Κρήσιον fέργον ἀπὸ κεκαυμένος [...], πίθοι *203VAS 3, δέπας μεῖζον τετρόfες *202VAS 1, δέπαε μείζοε τριόfεε *202VAS 2, δέπας μεῖον τετρόfες *202VAS 1, δέπας μεῖον τριόfες *202VAS 1, δέπας μεῖον ἄνοfες *202VAS 1
-\textbf{English translation}: Vessels with legs (tripods): [...] two tripods, Cretan work by Aigeus; one tripod, on a foot, with handles; one tripod, Cretan work, burnt off [...]; three pithoi (jars); one larger four-handled cup; two larger three-handled cups; one smaller four-handled cup; one smaller three-handled cup; one smaller cup without handles.
+\textbf{Linear B text}: o-u-ru-to o-pi-ha-ra e-pi-ko-wo ma-re-wo o-ka o-wi-to-no a-pe-ri-ta-wo o-re-ta e-te-wa ko-ki-jo su-we-ro-wi-jo o-wi-ti-ni-jo o-ka-rai VIR 50 ne-da-wa-ta-o o-ka e-ke-me-de a-pi-je-ta ma-ra-te-u ta-ni-ko ha-ru-wo-te ke-ki-de ku-pa-ri-si-jo VIR 20 ai-ta-re-u-si ku-pa-ri-si-jo ke-ki-de VIR 10 \textit{me-ta-qe pe-i e-qe-ta ke-ki-jo} a-e-ri-qo-ta e-ra-po ri-me-ne o-ka-ra o-wi-to-no VIR 30 ke-ki-de-qe a-phu-ka-ne VIR 20 me-ta-qe pe-i ai-ko-ta e-qe-ta \\
+\textbf{Greek translation}: \textgreek{Οὖροι Ὀπίχαρα, ἐπίκουροι. Μαλέϝος ὀρχά Ὀϝιτνῶι. Ἀπερίταϝος, Ὀρέλτας, Ἐτέϝας, Κόκκιος, Συϝεροϝιος, Ὀϝιτίνιος. Ὀρχᾶραι: ἄνδρες 50. Νεδαϝάταο ὀρχά. Ἐχεμήδης, Ἀμφιγέτας, Μαλθεύς, Τάνικος. Ἁρυϝότει Κεκκίδες Κυπαρίσσιοι: ἄνδρες 20. Αἰθαλεῦσι Κυπαρίσσιοι Κεκκίδες: ἄνδρες 10. μετά τε σφεῖ ἑπέτας Κέρκιος, Ἀελιπότας, Ἔλαφος. Λιμένει Ὀρχάρα Ὀϝιτνῶι: ἄνδρες 30. Κεκκίδες τε Ἀφυγάνες: ἄνδρες 20. μετά τε σφεῖ Αἰκότας ἑπέτας.} \\
+\textbf{English translation}: Guards at Opihara, auxiliaries. Maleus' company at Owitnos. Aperitawos, Orelas, Etewas, Kokkios, Suwerowios, Owitinios. Orcharai: 50 men. Nedawatas' company. Echemedes, Amphigetas, Maltheus, Tanikos. At Harywos, Kekkides Kyparissioi: 20 men. At Aithaleus, Kyparissioi Kekkides: 10 men. And with them, the follower Kerkios, Aelipotas, Elaphos. At Limen, Orchara at Owitnos: 30 men. And Kekkides Aphuganes: 20 men. And with them, Aikotas, the follower.
 
 \paragraph{Analysis.}
-In this document, the main problem is the positioning of the first two words, which are collocated ad the beginning of the document, but should probably be appended at the end of the first line.
-They have been added on top-right of the first row, as the scribe probably ran out of space to complete the sentence.
-This mistake was clearly inherited by the translation.
-The LLM correctly identifies the main words in the document:
-RERUN THIS AS WELL! 
+Overall, the LLM performs well in recognizing the logical function of the words in the document, despite erroneously treating some of them as proper nouns.
+Moreover, it recognizes ethnonyms, but simply transliterates them without attempting to interpret the places to which they relate.
 
-\subsubsection{PY Er 312}
+The main terms in this document are:
+\begin{itemize}
+  \item \textlinb{\Bo\Bu\Bru\Bto} \textlinb{\Be\Bpi\Bko\Bwo} (o-u-ru-to e-pi-ko-wo), "auxiliary guards", from Ancient Greek \textgreek{οὖρος} "guardian" and \textgreek{ἐπίκουρος} "auxiliary".
+  \item \textlinb{\Bo\Bpi\Ba2\Bra} (o-pi-ha-ra), is correctly recognized as a place name, but it probably means "at the coast", as also in Homer the term \textgreek{ἐφαλός} is attested, combining the prefix \textgreek{ἐπί} with \textgreek{ἅλς/ἁλός} "sea". 
+  \item \textlinb{\Bo\Bka} (o-ka), "company/military unit", corresponds to Ancient Greek \textgreek{ἀρχή}.
+  \item \textlinb{\Bo\Bwi\Bto\Bno} (o-wi-to-no), "Owitnos", is correctly identified as a toponym.
+  \item \textlinb{\Bo\Bwi\Bto\Bni\Bjo} \textlinb{\Bo\Bwi\Bka\Braiii} (o-wi-ti-ni-jo o-ka-rai), are treated separately by the LLM, but in my opinion they are connected.
+  Instead of a proper name, o-wi-ti-ni-jo is probably an ethnonym adjective meaning "of Owitnos", referred to o-ka-rai, which the LLM correctly identifies as a group of people, but not as an ethnic name ("Oihalai", from Tselentis lexicon).
+  So they are both ethnonyms.
+  \item \textlinb{\Bme\Bta\Bqe} \textlinb{\Bpe\Bi} (me-ta-qe pe-i), "and with them", from Ancient Greek \textgreek{μετά} "with", \textgreek{σφεῖς} "them".
+  \item \textlinb{\Be\Bqe\Bta} (e-qe-ta) is a military title meaning "follower/attendant", from Ancient Greek \textgreek{ἑπέτας}.
+  \item Other companies, deployed in other locations, are then listed in a similar manner.
+  \item \textlinb{\Be\Bra\Bpo} \textlinb{\Bri\Bme\Bne} (e-ra-po ri-me-ne), is completely misinterpreted by the LLM.
+  It should be interpreted as "the port of the deers", from Ancient Greek \textgreek{λιμήν} "port" and \textgreek{ἔλαφος} "deers", combined into \textgreek{ἐλάφων λιμένι}.
+\end{itemize}
 
-\textbf{Linear B text}: jo [...] i-qo-e-qe wi-ri-ni-jo o-po-qo ke-ra-ja-pi o-pi-i-ja-pi CUR [...] i-qi-ja [...] ku-do-ni-ja mi-to-we-sa-e a-ra-ro-mo-te-me-na po-ni-ki-ja BIG 1,"[...], ἱππο-ε-κες τε fίρινιοι ὀπωπω κεραίαφι ὀπίαιφι ΔΙΦΡΟΣ. [...] ἱππία Κυδωνία μιλτόfεσσα ἀραρμοτhεμένη φοινικία ΔΙΦΡΟΣ 1.","[...], and horse-equipped (parts), leathern eye-guards, with horn-like parts, with reins, a chariot. [...] A Cydonian, red-painted, fitted, red-dyed chariot: 1 chariot.","Grammatical analysis: The document is fragmented, indicated by `[...]`. The initial `jo` is incomplete and cannot be fully translated. `i-qo-e-qe` is interpreted as `ἱππο-ε-κες τε` (horse-equipped and), where `ἱππο-ε-κες` is an adjective (neuter plural, referring to implied parts) and `-qe` is the conjunction 'and'. `wi-ri-ni-jo o-po-qo` translates to `fίρινιοι ὀπωπω` (leathern eye-guards), with `fίρινιοι` (adjective, neuter plural) modifying `ὀπωπω` (noun, neuter plural). `ke-ra-ja-pi o-pi-i-ja-pi` are `κεραίαφι ὀπίαιφι` (with horn-like parts, with reins), both nouns in the instrumental plural (suffix `-pi`). `CUR` is the logogram for `ΔΙΦΡΟΣ` (chariot). The second part of the document describes a specific chariot: `i-qi-ja` is `ἱππία` (chariot), a feminine singular noun. `ku-do-ni-ja` is `Κυδωνία` (Cydonian), an adjective derived from the toponym Cydonia, feminine singular, agreeing with `ἱππία`. `mi-to-we-sa-e` is `μιλτόfεσσα` (red-painted), an adjective, feminine singular, agreeing with `ἱππία`; the final `-e` is a common Linear B simplification. `a-ra-ro-mo-te-me-na` is `ἀραρμοτhεμένη` (fitted), a perfect passive participle, feminine singular, agreeing with `ἱππία` (adapted from the provided neuter plural option to ensure grammatical agreement). `po-ni-ki-ja` is `φοινικία` (red-dyed), an adjective, feminine singular, agreeing with `ἱππία`. `BIG 1` is the logogram for `ΔΙΦΡΟΣ` (chariot) with the numeral 1. 
+Overall, the high number of proper nouns, ethnonyms and toponyms and the varying structure of the sentences make the translation of this document challenging.
+
+The last part of the document is not straightforward, as it presents two place names (\textit{o-ka-ra} and \textit{o-wi-to-no}) that are close and are assumed to be related, since they also appear together as ethnonyms.
+However, I cannot be sure about the correctness of this choice.
+Here I report an improved version of the translations, highlighting in red the adjustments and in blue the actual mistakes.
+Beware that the last part of the document is uncertain. \\
+\textbf{Greek translation}: \textgreek{Οὖροι} \textcolor{blue}{\textgreek{ἐφαλός}}\textgreek{, ἐπίκουροι. Μαλέϝος} \textcolor{red}{\textgreek{ἀρχή}} \textgreek{Ὀϝιτνῷ. Ἀπερίταϝος, Ὀρέλτας, Ἐτέϝας,} \textcolor{red}{\textgreek{Κόλκιος}}\textgreek{, Συϝεροϝιος.} \textcolor{blue}{\textgreek{Ὀϝιτίνιοι Οἰχαλεαι}}\textgreek{: ἄνδρες 50. Νεδαϝάταο} \textcolor{red}{\textgreek{ἀρχή}}\textgreek{. Ἐχεμήδης, Ἀμφιγέτας, Μαλθεύς, Τάνικος.} \textcolor{red}{\textgreek{Ἁρυϝόθεν Κελχίδες Κυπαρίσιοι}}\textgreek{: ἄνδρες 20. Αἰθαλεῦσι} \textcolor{red}{\textgreek{Κελχίδες Κυπαρίσιοι}}\textgreek{: ἄνδρες 10. μετά τε} \textcolor{red}{\textgreek{σφεῖς}} \textgreek{ἑπέτας Κέρκιος. Ἀελιπότας,} \textcolor{blue}{\textgreek{ἐλάφων λιμένι}} \textcolor{red}{\textgreek{Ὀιχαλᾳ}} \textgreek{Ὀϝιτνῷ: ἄνδρες 30.} \textcolor{red}{\textgreek{Κελχίδες}} \textgreek{τε Ἀφυγάνες: ἄνδρες 20. μετά τε} \textcolor{red}{\textgreek{σφεῖς}} \textgreek{Αἰκότας ἑπέτας.} \\
+\textbf{English translation}: Guards at \textcolor{blue}{the coast}, auxiliaries. Maleus' company at Owitnos: Aperitawos, Orelas, Etewas, \textcolor{red}{Kolchios}, Suwerowios. \textcolor{blue}{(People) from Owitnos and Oichala}: 50 men. Nedawatas' company. Echemedes, Amphigetas, Maltheus, Tanikos. At Harywos, \textcolor{red}{(people) from Kelchis and Kyparisos}: 20 men. At Aithaleus, \textcolor{red}{(people) from Kelchis and Kyparisos}: 10 men. And with them, the \textcolor{red}{attendant} Kerkios. Aelipotas, \textcolor{blue}{at the deers' port} \textcolor{red}{in Oichala} at Owitnos: 30 men. \textcolor{red}{(People) from Kelchis and Aphy}: 20 men. And with them, Aikotas, the \textcolor{red}{attendant}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.4\textwidth]{Images/4726.png} % Adjust width and filename
+  \caption{Picture of the original document PY An 657.}
+  \label{fig:doc7}
+\end{figure}
+
+\subsubsection{PY TA 641} \label{doc:pyta641}
+This document is a short inventory of vessels, in particular tripods and pithoi (large storage jars).
+The translation provided by Tselentis covers the first portion of the document, while the rest is left untranslated. \\
+\textbf{Linear B text}: \textit{ke-re-ha *201VAS [...] ti-ri-po-de ai-ke-u ke-re-si-jo we-ke *201VAS 2 ti-ri-po e-me po-de o-wo-we *201VAS 1 ti-ri-po ke-re-si-jo we-ke a-pu ke-ka-u-me-no} [...] qe-to *203VAS 3 di-pa me-zo-e qe-to-ro-we *202VAS 1 di-pa-e me-zo-e ti-ri-o-we-e *202VAS 2 di-pa me-wi-jo qe-to-ro-we *202VAS 1 di-pa me-wi-jo ti-ri-jo-we *202VAS 1 di-pa me-wi-jo a-no-we *202VAS 1 \\
+\textbf{Greek translation}: \textgreek{Σκελέα *201VAS [...] Τρίποδες Αἰγεύς Κρήσιος ἔργε *201VAS 2. Τρίπους ἐν ποδεί ὄϝοϝεις *201VAS 1. Τρίπους Κρήσιος ἔργε ἀπὸ κεκαυμένος. Πίθοι *203VAS 3. Δέπας μεῖζον τετρόϝες *202VAS 1. Δέπαε μείζοε τριόϝεε *202VAS 2. Δέπας μεῖον τετρόϝes *202VAS 1. Δέπας μεῖον τριόϝes *202VAS 1. Δέπας μεῖον ἄνοϝον *202VAS 1.} \\
+\textbf{English translation}: Tripod with legs [...] Two tripods, Aigeus, Cretan-made. One tripod, with one foot, one-handled. One tripod, Cretan-made, burnt off. Three jars. One larger, four-handled cup. Two larger, three-handled cups. One smaller, four-handled cup. One smaller, three-handled cup. One smaller, handleless cup.
+
+\paragraph{Analysis.}
+In this document, the main problem is the positioning of the first two words, which occur at the beginning of the document but should probably be appended to the end of the first line.
+They were added at the top right of the first row, as the scribe likely ran out of space to complete the line.
+The translation clearly inherits this misplacement.
+A notable aspect of this fragment is the presence of the dual, attested when describing two cups.
+
+The LLM correctly identifies the main words in the document
+\begin{itemize}
+  \item \textlinb{\Bke\Bre\Bre\Baii} (ke-re-ha), "legs", from Ancient Greek \textgreek{σκελέα}, is a noun, linked to the verb \textit{ke-ka-u-me-no}, specifying where the tripod is burnt.  
+  \item \textlinb{\Bti\Bri\Bpo}[\textlinb{\Bde}] (ti-ri-po[-de]), \textlinb{\Bqe\Bto} (qe-to), and \textlinb{\Bdi\Bpa} (di-pa) are the Linear B words for \textgreek{τρίπους} "tripod", \textgreek{πίθος} "jar" and \textgreek{δέπας} "cup", respectively.
+  \item \textlinb{\Ba\Bi\Bke\Bu} (ai-ke-u), "Aigeus", is correctly identified as a proper name, despite not being linked to anything precisely, like in Tselentis translation.
+  \item \textlinb{\Bke\Bre\Bse\Bi\Bjo} \textlinb{\Bwe\Bke} (ke-re-si-jo we-ke), "Cretan-made", from Ancient Greek \textgreek{Κρήσιος} "Cretan" and \textgreek{ἔργον} "work", is an description linked to the tripods. 
+  \item \textlinb{\Be\Bme} \textlinb{\Bpo\Bde} (e-me po-de), "with one foot", from Ancient Greek \textgreek{ἐνί ποδεί}, is another description linked to a tripod.
+  It is interesting to note that the LLM correctly interprets \textit{e-me} as the numeral "one", even though it is misinterpreted in the analysis and in the translation.
+  \item \textlinb{\Bo\Bwo\Bwe} (o-wo-we), \textlinb{\Bqe\Bto\Bro\Bwe} (qe-to-ro-we), \textlinb{\Bti\Bri\Bjo\Bwe} (ti-ri-o-we-e), and \textlinb{\Ba\Bo\Bno\Be} (a-no-we) are adjectives linked to the jars, meaning "one-handled", "four-handled", "three-handled", and "handleless", respectively.
+  \item \textlinb{\Bke\Bka\Bu\Bme\Bno} (ke-ka-u-me-no), "burnt off", from the Ancient Greek verb \textgreek{καίω}, is a perfect passive participle linked to a tripod.
+  \item \textlinb{\Bme\Bzo\Be} (me-zo-e) and \textlinb{\Bme\Bwi\Bjo} (me-wi-jo) are adjectives linked to the cups, meaning "larger" and "smaller" from Ancient Greek \textgreek{μείζων} and \textgreek{μείων}, respectively.
+\end{itemize}
+
+Here I report a refined version of both translations, adding the first two words at the end of the first line and highlighting in red the adjustments and in blue the mistakes. \\
+\textbf{Greek translation}: \textgreek{Τρίποδες Αἰγεύς} \textcolor{red}{\textgreek{Κρήσιου ἔργου}} \textgreek{*201VAS 2. Τρίπους} \textgreek{ἐνί} \textgreek{ποδεί} \textcolor{red}{\textgreek{ὠτόϝεις}} \textgreek{*201VAS 1. Τρίπους} \textcolor{red}{\textgreek{Κρήσιου ἔργου}} \textgreek{κεκαυμένος} \textcolor{blue}{\textgreek{ἀπὸ σκελέα *201VAS}}\textgreek{. Πίθοι *203VAS 3. Δέπας μεῖζον} \textcolor{red}{\textgreek{τετραώτον}} \textgreek{*202VAS 1.} \textcolor{red}{\textgreek{Δέπα μείζονε τριώτω}} \textgreek{*202VAS 2. Δέπας μεῖον} \textcolor{red}{\textgreek{τετραώτον}} \textgreek{*202VAS 1. Δέπας μεῖον} \textcolor{red}{\textgreek{τριώτον}} \textgreek{*202VAS 1. Δέπας μεῖον} \textcolor{red}{\textgreek{ἀνώτον}} \textgreek{*202VAS 1.} \\
+\textbf{English translation}: Two tripods, Aigeus, Cretan-made. One tripod, with one foot, one-handled. One tripod, Cretan-made, burnt off \textcolor{blue}{at the legs}. Three jars. One larger, four-handled cup. Two larger, three-handled cups. One smaller, four-handled cup. One smaller, three-handled cup. One smaller, handleless cup.
+
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\textwidth]{Images/5344.png} % Adjust width and filename
+  \caption{Picture of the original document PY TA 641.}
+  \label{fig:doc8}
+\end{figure}
+
+
+\subsubsection{PY Er 312} \label{doc:pyer312}
+This document lists various land holdings together with their grain quantities and associated personnel.
+Tselentis provides a translation for the entire document.  \\
+\textbf{Linear B text}: \textit{wa-na-ka-te-ro te-me-no to-so-jo pe-ma GRA 30 ra-wa-ke-si-jo te-me-no GRA 10 te-re-ta-o to-so pe-ma GRA 30 to-so-de te-re-ta VIR 3 wo-ro-ki-jo-ne-jo e-re-mo to-so-jo pe-ma GRA 6} \\
+\textbf{Greek translation}: \textgreek{ϝανακτέρον τέμενος: τοσοῖο σπέρματος ΓΡΑ 30. λαϝαγεσίοιο τέμενος: ΓΡΑ 10. τελεσταῶν τόσον σπέρμα: ΓΡΑ 30. τοσόνδε τελεσταί: ΑΝΗΡ 3. ϝοργιονείοιο ἔρημον: τοσοῖο σπέρματος ΓΡΑ 6.} \\
+\textbf{English translation}: Royal temenos: of so much grain, GRA 30. Temenos of the lawagetas: GRA 10. Of the telestai, so much grain: GRA 30. And so many telestai: 3 men. Fallow land of Worgion: of so much grain, GRA 6.
+
+\paragraph{Analysis.} The LLM performs well in recognizing all the words in the document.
+It also recognizes the logograms in its analysis, although it simply transliterates them in the translation.
+The translation is accurate overall, helped by the clear, list-like structure of the entries.
+The main terms are:
+\begin{itemize}
+  \item \textlinb{\Bte\Bme\Bno} (te-me-no), "temenos", from Ancient Greek \textgreek{τέμενος}. Its usual meaning is "sacred precinct", but here it is used for a land holding.
+  The two occurrences are modified by \textlinb{\Bwa\Bna\Bka\Bte\Bro} (wa-na-ka-te-ro), "royal", transliterated as \textgreek{ϝανακτέρος} from \textgreek{ἄναξ}, and \textlinb{\Bra\Bwa\Be\Bke\Bsi\Bjo} (ra-wa-ke-si-jo), "of the lawagetas", a Mycenaean official title, transliterated as \textgreek{λαϝαγεσίοιο}.
+  \item \textlinb{\Bto\Bo\Bso\Bo\Bjo} (to-so-jo), "of so much", from Ancient Greek \textgreek{τόσοιο}, functions as a genitive of measure linked to the quantity of grain.
+  It is therefore associated with \textlinb{\Bpe\Bma} (pe-ma), "grain/seed", from \textgreek{σπέρμα}, and with the logogram \textit{GRAnum} for "grain".
+  \item \textlinb{\Bte\Bre\Bta}[\textlinb{\Bo}] (te-re-ta[-o]), "telestai", from \textgreek{τελεσταί}, a Mycenaean title possibly connected with \textgreek{τέλος} "tax". In later Greek the term can denote a "priest".
+  \item \textlinb{\Bwo\Bro\Bki\Bo\Bjo\Bne\Bjo} \textlinb{\Be\Bre\Bmo} (wo-ro-ki-jo-ne-jo e-re-mo) is the only imprecise part of the translation.
+  Tselentis associates this expression with a cult site; thus the translation should be "remote place of the Worgiones", from \textgreek{ἔρημος} "remote place."
+
+\end{itemize}
+Here I provide a slightly refined version of both translations, highlighting in red the few adjustments. \\
+\textbf{Greek translation}: \textgreek{ϝανακτέρον τέμενος: τοσοῖο σπέρματος} \textcolor{red}{\textgreek{ΣΙΤΟΣ}} \textgreek{30. λαϝαγεσίοιο τέμενος:} \textcolor{red}{\textgreek{ΣΙΤΟΣ}} \textgreek{10. τελεσταῶν τόσον σπέρμα:} \textcolor{red}{\textgreek{ΣΙΤΟΣ}} \textgreek{30. τοσόνδε τελεσταί: ΑΝΗΡ 3.} \textcolor{blue}{\textgreek{ϝοργιώνειοιον}} \textgreek{ἔρημον: τοσοῖο σπέρματος} \textcolor{red}{\textgreek{ΣΙΤΟΣ}} \textgreek{6.} \\
+\textbf{English translation}: Royal \textcolor{red}{land holding}: of so much grain, 30 \textcolor{red}{units of grain}. \textcolor{red}{Land holding} of the lawagetas: 10 \textcolor{red}{units of grain}. Of the telestai, so much grain: 30 \textcolor{red}{units of grain}. And so many telestai: 3 men. \textcolor{blue}{Remote land of the Worgiones}: of so much grain, 6 \textcolor{red}{units of grain}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.38\textwidth]{Images/4959.png} % Adjust width and filename
+  \caption{Picture of the original document PY Er 312.}
+  \label{fig:doc9}
+\end{figure}
 
 \subsubsection{KN Fp 1+31}
 This document records oil offerings made in the month of Deukios.
@@ -347,7 +455,7 @@ In this case, Tselentis provides a translation covering the whole document. \\
 
 \paragraph{Analysis.}
 The translation of this document is quite accurate: the main terms and phrases are correctly rendered, and the overall structure is preserved.
-This success largely reflects the document’s highly regular format, which repeats the same pattern several times.
+This success largely reflects the document's highly regular format, which repeats the same pattern several times.
 
 The main words that appear in this document are:
 \begin{itemize}
@@ -368,33 +476,95 @@ In light of the above considerations, I report an improved version of both trans
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.4\textwidth]{Images/4088.png} % Adjust width and filename
+  \includegraphics[width=0.38\textwidth]{Images/4088.png} % Adjust width and filename
   \caption{Picture of the original document KN Fp 1+31.}
-  \label{fig:doc8}
+  \label{fig:doc10}
 \end{figure}
 
 \subsubsection{PY Ab 573}
-PALLE PALLE...
+This very short document lists women and children, as well as quantities of grain and figs.
+Tselentis provides a translation for a small portion of the document. \\
+\textbf{Linear B text}: GRA 5 T 1 DA TA \textit{pu-ro mi-ra-ti-ja MUL 16 ko-wa 3 ko-wo 7} NI 5 1 \\
+\textbf{Greek translation}: \textgreek{Πύλος: ΣΙΤΟΣ 5 T 1 DA TA. Μιλατίαι ΓΥΝΗ 16, κόρϝαι 3, κόρϝοι 7. ΣΥΚΟΝ 5 1.} \\
+\textbf{English translation}: Pylos: Grain 5 T 1. DA TA. Milatian women: 16 women, 3 girls, 7 boys. Figs: 5 1.
 
-\subsubsection{PY Un 718}
-This last document is an administrative record listing offerings.
-The translation provided by Tselentis for this document covers only the first portion. \\
+The initial part of the document is not translated by Tselentis. It is written at the top of the tablet, as if the scribe had run out of space to complete the line.
+It should probably be appended at the end of the line.
+However, it is likely independent of the rest of the entry, so the LLM's placement is acceptable.
+
+\paragraph{Analysis.}
+This document is rich in logograms: the only syllabographic words are the ethnonym \textlinb{\Bmi\Bra\Bti\Bja} (mi-ra-ti-ja) from Ancient Greek \textgreek{Μιλήσιαι} "miletian", and \textlinb{\Bko\Bwo}/\textlinb{\Bko\Bwa} (ko-wo/ko-wa) from Ancient Greek \textgreek{κόρος/κόρη} "boy/girl".
+The LLM correctly identifies the remaining items as logograms or abbreviations.
+The translation is accurate, with a minor adjustment shown below in red. \\
+\textbf{Greek translation}: \textgreek{Πύλος: ΣΙΤΟΣ 5 T 1 DA TA.} \textcolor{red}{\textgreek{Μιλήσιαι}} \textgreek{ΓΥΝΗ 16, κόρϝαι 3, κόρϝοι 7. ΣΥΚΟΝ 5 1.} \\
+\textbf{English translation}: Pylos: Grain 5 T 1. DA TA. \textcolor{red}{Miletian} women: 16 women, 3 girls, 7 boys. Figs: 5 1.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\textwidth]{Images/4611.png} % Adjust width and filename
+  \caption{Picture of the original document PY Ab 573.}
+  \label{fig:doc11}
+\end{figure}
+
+\subsubsection{PY Un 718} \label{doc:pyun718}
+This final document is an administrative record listing offerings.
+The translation provided by Tselentis for this document covers only the first part of the tablet. \\
 \textbf{Linear B text}: \textit{sa-ra-pe-da po-se-da-o-ni do-so-mo o-wi-de-ta-i do-so-mo to-so e-ke-rya-wo do-se GRA 4 VIN 3 BOSm 1} tu-ryo TU+RYO 10 ko-wo *153 1 me-ri-to V 3 o-da-ha da-mo GRA 2 VIN 2 OVISm 2 TU+RYO 5 a-re-ro A+RE+PA V 2 *153 1 to-so-de ra-wa-ke-ta do-se OVISm 2 me-re-u-ro FAR T 6 VIN S 2 o-da-ha wo-ro-ki-jo-ne-jo ka-ma GRA [...] T 6 VIN S 1 TU+RYO 5 me-ri [...] 1 [...] V 1 \\
-\textbf{Greek translation}: \textgreek{Σαραπέδα Ποσειδάωνι δόσμος, ὀfιδέται δόσμος. Τόσος Ἐχελάfων δώσει: σῖτος 4, οἶνος 3, ταῦρος 1, τυρίον TU+RYO 10, κοῦρος *153 1, μέλι V 3. Ὀδαhα δᾶμος: σῖτος 2, οἶνος 2, κρίος 2, τυρίον TU+RYO 5. Ἀρέλος: ἀλείφαρ V 2, *153 1. Τοσόνδε λαfαγέτας δώσει: κρίος 2, ἄλευρον ΦΑΡ T 6, οἶνος S 2. Ὀδαhα fρογιώνειον κᾶμα: σῖτος [...] T 6, οἶνος S 1, τυρίον TU+RYO 5, μέλι [...] 1 [...] V 1.} \\
-\textbf{English translation}: Sarapeda: an offering to Poseidon, an offering to the overseers. So much Echelāwōn will give: 4 units of grain, 3 units of wine, 1 bull, 10 units of cheese (TU+RYO), 1 boy (*153), 3 'V' units of honey. Also, the community: 2 units of grain, 2 units of wine, 2 rams, 5 units of cheese (TU+RYO). Arelos: 2 'V' units of ointment (A+RE+PA), 1 unit of *153. So much the Lawagetas will give: 2 rams, 6 'T' units of flour (FAR), 2 'S' units of wine. Also, Wrogion's plot: [...] 6 'T' units of grain, 1 'S' unit of wine, 5 units of cheese (TU+RYO), [...] 1 'V' unit of honey.
+\textbf{Greek translation}: \textgreek{Σραπέδας: δόσμος Ποσειδῶνι. δόσμος οϝιδετται. Τόσος Ἐχελαϝῶν δώσει: ΣΙΤΟΣ 4, ΟΙΝΟΣ 3, ΤΑΥΡΟΣ 1, τυρίον ΤΥΡΙΟΝ 10, κοῦρος *153 1, μέλι V 3. Οδαhα δᾶμος: ΣΙΤΟΣ 2, ΟΙΝΟΣ 2, ΚΡΙΟΣ 2, ΤΥΡΙΟΝ 5. Ἀλεῖρος: ἀλειφάρ V 2, *153 1. Τοσόνδε λαϝαγέτας δώσει: ΚΡΙΟΣ 2, ἄλευρον ΦΑΡ T 6, ΟΙΝΟΣ S 2. Οδαhα ϝρογιονείον κᾶμα: ΣΙΤΟΣ [...] T 6, ΟΙΝΟΣ S 1, ΤΥΡΙΟΝ 5, μέλι [...] 1 [...] V 1.}
+\textbf{English translation}: Sarapeda: Offering to Poseidon. Offering to the overseers. Echelawa will give this much: Grain 4, Wine 3, Bull 1, Cheese 10, Boy *153 1, Honey V 3. Also, the community: Grain 2, Wine 2, Ram 2, Cheese 5. Aleiros: Ointment V 2, *153 1. This much the Lawagetas will give: Ram 2, Flour T 6, Wine S 2. Also, Wrogioneios' plot: Grain [...] T 6, Wine S 1, Cheese 5, Honey [...] 1 [...] V 1.
 
 \paragraph{Analysis.}
 The LLM provides a fairly accurate translation of this document, with some problematic issues.
 \begin{itemize}
   \item The first word \textlinb{\Bsa\Bra\Be\Bpe\Bda} (sa-ra-pe-da) is transliterated as "Sarapeda". The LLM considers it as a proper noun or a toponym. Its possible toponym function is mentioned also by Chadwick and Ventris in their lexicon \cite{chadwick-notes}.
-  However, Tselentis interprets it as an epithet of Poseidon, appearing as the next word \textlinb{\Bpo\Bse\Bda\Bo\Bni} (po-se-da-o-ni), linked to Ancient Greek \textgreek{Ποσειδῶν}, translating it as "Srapedas".
-  \item The word \textlinb{\Bo\Bwi\Bde\Bta\Bi} (o-wi-de-ta-i) is clearly linked to Ancient Greek \textgreek{οἶδα} "to know". Tselentis mentions that it is a religious title, while the LLM tries to interpret it as "overseers". However, it is correctly identified as a dative plural.
-  \item The verb \textlinb{\Bdo\Bse} (do-se) is correctly identified as the 3rd person singular future active indicative of \textgreek{δίδωμι}, "to give".
-  \item The most notable feature of the enumnerated items in this fragment is the presence of logographic merging of common linear B words, which the LLM was able to reconsturct.
-  For example, the word \textlinb{\Btu\Broii} (tu-ryo) appears both isolated and merged into a unique symbol (TU+RYO), representing "cheese" from Ancient Greek \textgreek{τυρίον}. 
-  Moreover, \textlinb{\Ba\Bre\Bpa} (a-re-pa) appears uniquely as a logogram (A+RE+PA), representing "ointment" from Ancient Greek \textgreek{ἀλείφαρ}.
-
+  The LLM treats it as a proper noun or toponym, a possibility also noted by Chadwick and Ventris \cite{chadwick-notes}. Tselentis, however, interprets it as an epithet of Poseidon (the following word \textlinb{\Bpo\Bse\Bda\Bo\Bni} po-se-da-o-ni, \textgreek{Ποσειδῶν}) and translates "Srapedas".
+  \item The word \textlinb{\Bo\Bwi\Bde\Bta\Bi} (o-wi-de-ta-i) is clearly linked to Ancient Greek \textgreek{οἶδα} "to know".
+  Tselentis treats it as a religious title and leaves it transliterated; the LLM renders it as "overseers". In any case, the dative plural is correctly recognized.
+  \item The verb \textlinb{\Bdo\Bse} (do-se) is correctly identified as the 3rd person singular future active indicative of the Ancient Greek verb \textgreek{δίδωμι}, "to give".
+  \item A notable feature of the enumerated items in this fragment is the logographic merging of common Linear B words, which the LLM successfully reconstructs.
+  For example, the word \textlinb{\Btu\Broii} (tu-ryo) appears both as a word and as the fused sign (TU+RYO) for "cheese", from Ancient Greek \textgreek{τυρίον}. 
+  Conversely, \textlinb{\Ba\Bre\Bpa} (a-re-pa) appears only as the logogram (A+RE+PA) for "ointment", from Ancient Greek \textgreek{ἀλείφαρ}.
+  \item The meaning of \textlinb{\Bko\Bwo}, paired with the unknown syllabogram *153, is uncertain.
+  \item \textlinb{\Bo\Bda\Baii} (o-da-ha) is treated as a conjunction "also", which matches Tselentis' description as an introductory word.
+  \item \textlinb{\Bwo\Bro\Bki\Bjo\Bne\Bjo} \textlinb{\Bka\Bma} (wo-ro-ki-jo-ne-jo ka-ma) refers again to the Worgiones cult association, as in Document \hyperref[doc:pyer312]{PY Er 312}.
+  \textit{ka-ma} is correctly taken as "plot/field", from Ancient Greek \textgreek{κτῆμα}.
 \end{itemize}
 
-Grammatical analysis: The document is an administrative record detailing offerings and distributions. `sa-ra-pe-da` (Σαραπέδα) is a proper noun in the nominative, likely acting as a heading or subject. `po-se-da-o-ni` (Ποσειδάωνι) is a theonym in the dative case, indicating the recipient. `do-so-mo` (δόσμος) is interpreted as a noun (offering/gift) in the nominative case, despite the classifier indicating 'verb', as it fits the administrative context of lists of offerings. `o-wi-de-ta-i` (ὀfιδέται) is a noun in the dative plural, indicating recipients. `to-so` (τόσος) and `to-so-de` (τοσόνδε) are adjectives meaning 'so much/so many', introducing the quantities to be given, with `-de` as an allative/demonstrative suffix on the latter. `e-ke-rya-wo` (Ἐχελάfων), `da-mo` (δᾶμος), `a-re-ro` (Ἀρέλος), and `ra-wa-ke-ta` (λαfαγέτας) are proper nouns or titles in the nominative case, acting as subjects or headings for their respective entries. `do-se` (δώσει) is the 3rd person singular future active indicative of `δίδωμι` (to give). `tu-ryo` (τυρίον), `ko-wo` (κοῦρος), `me-ri` (μέλι), `me-re-u-ro` (ἄλευρον), `ka-ma` (κᾶμα), and `A+RE+PA` (ἀλείφαρ) are nouns in the nominative/accusative case, representing the items being listed. `me-ri-to` is interpreted as `μέλι` (honey) in the nominative/accusative, as it's part of a list of items, overriding the genitive form `μέλιτος` or the thematic -o classifier. `o-da-ha` (ὀδαhα) is an adverb meaning 'also' or 'thus', introducing subsequent entries. `wo-ro-ki-jo-ne-jo` (fρογιώνειον) is an adjective modifying `ka-ma` (κᾶμα), indicating a plot belonging to or associated with Wrogion. Logograms (GRA, VIN, BOSm, OVISm, TU+RYO, FAR, A+RE+PA, *153) and units (T, S, V) are treated as direct representations of commodities and their quantities. Logical/Syntactic analysis: The document is structured as a series of administrative entries, typical of Linear B tablets. The initial line acts as a general heading or summary of offerings. Subsequent sections follow a pattern: `[Giver/Entity] [Verb (will give, or implied)] [List of items and quantities]`. The phrases introduced by `o-da-ha` (also) indicate additional entries or distributions from different entities. The use of `to-so` and `to-so-de` emphasizes the total quantity of items to be given by specific individuals or groups. The lists of items are paratactic, with quantities following the logograms. Subordinate clause analysis: No explicit subordinate clauses are present. The structure is primarily paratactic, listing entities, actions, and items. Error recovery: The discrepancy in `do-so-mo` (classified as verb, but options are nouns) and `me-ri-to` (classified as thematic in -o, but `μέλι` is athematic and `μελιτος` is genitive) was resolved by prioritizing semantic coherence within the administrative context, interpreting them as nouns (offering, honey) in the appropriate case for a list."
+Here I report a refined version of both translations, highlighting in red the adjustments. \\
+\textbf{Greek translation}: \textgreek{Δόσμος} \textcolor{red}{\textgreek{Σραπέδᾳ}} \textgreek{Ποσειδῶνι. Δόσμος} \textcolor{red}{\textgreek{οϝιδέταις}}\textgreek{. Τόσος Ἐχελαϝῶν δώσει: ΣΙΤΟΣ 4, ΟΙΝΟΣ 3, ΤΑΥΡΟΣ 1, τυρίον ΤΥΡΙΟΝ 10, κοῦρος *153 1, μέλι V 3. Οδαhα δᾶμος: ΣΙΤΟΣ 2, ΟΙΝΟΣ 2, ΚΡΙΟΣ 2, ΤΥΡΙΟΝ 5. Ἀλεῖρος: ἀλειφάρ V 2, *153 1. Τοσόνδε λαϝαγέτας δώσει: ΚΡΙΟΣ 2, ἄλευρον} \textcolor{red}{\textgreek{ΑΛΕΥΡΟΝ}} \textgreek{T 6, ΟΙΝΟΣ S 2. Οδαhα} \textcolor{red}{\textgreek{ϝοργιονείον κτῆμα}}\textgreek{: ΣΙΤΟΣ [...] T 6, ΟΙΝΟΣ S 1, ΤΥΡΙΟΝ 5, μέλι [...] 1 [...] V 1.} \\
+\textbf{English translation}: Offering to \textcolor{red}{Srapedas} Poseidon. Offering to the overseers. \textcolor{red}{Echelawon} will give this much: Grain 4, Wine 3, Bull 1, Cheese 10, Boy *153 1, Honey V 3. Also, the community: Grain 2, Wine 2, Ram 2, Cheese 5. Aleiros: Ointment V 2, *153 1. This much the Lawagetas will give: Ram 2, Flour T 6, Wine S 2. Also, the plot \textcolor{red}{of the Worgiones}: Grain [...] T 6, Wine S 1, Cheese 5, Honey [...] 1 [...] V 1.
 
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.45\textwidth]{Images/5385.png} % Adjust width and filename
+  \caption{Picture of the original document PY Un 718.}
+  \label{fig:doc12}
+\end{figure}
+
+The translations of all remaining documents are provided in the thesis files, in a CSV file that includes the document index, the Linear B form, the Greek and English translations, and the model's reasoning.
+
+\subsection{Error Analysis} \label{sec:errors}
+This section summarizes the errors made by the LLM in translating the selected documents and analyzes their likely causes, given the input information.
+
+The first type of error arises from misinterpreting words when cognate support is insufficient or misleading.
+This is especially likely when no clear Ancient Greek cognate exists or when the cognate's meaning has shifted.
+For example, in Document \hyperref[doc:pyjn310]{Py Jn 310} the form \textlinb{\Bpo\Bti\Bni\Bja\Bwe\Bjo} (po-ti-ni-ja-we-jo) is not treated as place-related, because Ancient Greek \textgreek{πότνια} ("mistress/lady") no longer transparently denotes a deity.
+Another example appears in Document \hyperref[doc:knso4439]{KN So 4439}, where \textlinb{\Be\Bri\Bka} (e-ri-ka) is associated with Ancient Greek \textgreek{ἑλικτός} "twisted", unlike in Linear B, where it is associated with the willow tree.
+
+A second type of error is the misinterpretation of a word's grammatical function.
+This can occur when the LLM fails to recognize a noun's case or a verb's tense.
+For instance, in document \hyperref[doc:pyan657]{PY An 657}, \textlinb{\Be\Bra\Bwo} (e-ra-wo) is treated as a nominative noun, whereas it is actually genitive.
+Another example is in document \hyperref[doc:pyta641]{PY TA 641}, where \textlinb{\Bke\Bre\Baii} (ke-re-ha), from Ancient Greek \textgreek{σκέλεα} "legs", is not associated with its particle \textgreek{ἀπό}; however, this error is likely attributable to the unusual placement of the initial line in the document.
+
+The third error type I want to highlight is the misinterpretation of a word's function due to misclassification.
+When the auxiliary classifiers mislabel a word, the LLM may misassign its role in the sentence.
+For example, in Document \hyperref[doc:pyan657]{PY An 657}, two ordinary locatives are interpreted as proper toponyms: both \textlinb{\Bo\Bpi\Baii\Bra} (o-pi-ha-ra) and \textlinb{\Bri\Bme\Bne} (ri-me-ne) are rendered as "Opihara" and "Limenei", rather than "at the coast" and "at the port".
+Likewise, the two occurrences of \textlinb{\Bwo\Bro\Bki\Bjo\Bne\Bjo} (wo-ro-ki-jo-ne-jo) in Documents \hyperref[doc:pyer312]{PY Er 312} and \hyperref[doc:pyun718]{PY Un 718} are misclassified as a proper name, which leads to an interpretation as an anthroponym rather than as a cult association.
+
+Finally, some errors arise from the LLM's difficulty in interpreting certain logographic abbreviations, which are occasionally misread or left unspecified.
+Taken together, these are the main error patterns observed in the analyzed documents, given the input information available to the model.
+
+A further, notable issue is the LLM's tendency to produce forms closer to Mycenaean than to classical Ancient Greek.
+Many translations retain clear Linear B reminiscences, most notably the persistent use of the digamma (\textgreek{ϝ}) and frequent Mycenaean case endings.
+I have largely set these aside when the sense was clear and the content was correctly interpreted.
+However, if classical Ancient Greek is to serve as a reliable support language for translation, the system will need better normalization toward Classical morphology and orthography (e.g., consistent suppression of \textgreek{ϝ} where appropriate and alignment with Classical inflectional endings).
