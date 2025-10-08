@@ -216,3 +216,96 @@ articleno = {52},
 numpages = {25},
 keywords = {Dataset, Linear B script, recurrent neural networks}
 }
+
+@inproceedings{meteor,
+author = {Lavie, Alon and Agarwal, Abhaya},
+title = {Meteor: an automatic metric for MT evaluation with high levels of correlation with human judgments},
+year = {2007},
+publisher = {Association for Computational Linguistics},
+address = {USA},
+abstract = {Meteor is an automatic metric for Machine Translation evaluation which has been demonstrated to have high levels of correlation with human judgments of translation quality, significantly outperforming the more commonly used Bleu metric. It is one of several automatic metrics used in this year's shared task within the ACL WMT-07 workshop. This paper recaps the technical details underlying the metric and describes recent improvements in the metric. The latest release includes improved metric parameters and extends the metric to support evaluation of MT output in Spanish, French and German, in addition to English.},
+booktitle = {Proceedings of the Second Workshop on Statistical Machine Translation},
+pages = {228–231},
+numpages = {4},
+location = {Prague, Czech Republic},
+series = {StatMT '07}
+}
+
+@inproceedings{bleu,
+author = {Papineni, Kishore and Roukos, Salim and Ward, Todd and Zhu, Wei-Jing},
+title = {BLEU: a method for automatic evaluation of machine translation},
+year = {2002},
+publisher = {Association for Computational Linguistics},
+address = {USA},
+url = {https://doi.org/10.3115/1073083.1073135},
+doi = {10.3115/1073083.1073135},
+abstract = {Human evaluations of machine translation are extensive but expensive. Human evaluations can take months to finish and involve human labor that can not be reused. We propose a method of automatic machine translation evaluation that is quick, inexpensive, and language-independent, that correlates highly with human evaluation, and that has little marginal cost per run. We present this method as an automated understudy to skilled human judges which substitutes for them when there is need for quick or frequent evaluations.},
+booktitle = {Proceedings of the 40th Annual Meeting on Association for Computational Linguistics},
+pages = {311–318},
+numpages = {8},
+location = {Philadelphia, Pennsylvania},
+series = {ACL '02}
+}
+
+@inproceedings{rouge,
+  title={ROUGE: A Package for Automatic Evaluation of Summaries},
+  author={Chin-Yew Lin},
+  booktitle={Annual Meeting of the Association for Computational Linguistics},
+  year={2004},
+  url={https://aclanthology.org/W04-1013.pdf}
+}
+
+@inproceedings{ter,
+    title = "A Study of Translation Edit Rate with Targeted Human Annotation",
+    author = "Snover, Matthew  and
+      Dorr, Bonnie  and
+      Schwartz, Rich  and
+      Micciulla, Linnea  and
+      Makhoul, John",
+    booktitle = "Proceedings of the 7th Conference of the Association for Machine Translation in the Americas: Technical Papers",
+    month = aug # " 8-12",
+    year = "2006",
+    address = "Cambridge, Massachusetts, USA",
+    publisher = "Association for Machine Translation in the Americas",
+    url = "https://aclanthology.org/2006.amta-papers.25/",
+    pages = "223--231",
+    abstract = "We examine a new, intuitive measure for evaluating machine-translation output that avoids the knowledge intensiveness of more meaning-based approaches, and the labor-intensiveness of human judgments. Translation Edit Rate (TER) measures the amount of editing that a human would have to perform to change a system output so it exactly matches a reference translation. We show that the single-reference variant of TER correlates as well with human judgments of MT quality as the four-reference variant of BLEU. We also define a human-targeted TER (or HTER) and show that it yields higher correlations with human judgments than BLEU{---}even when BLEU is given human-targeted references. Our results indicate that HTER correlates with human judgments better than HMETEOR and that the four-reference variants of TER and HTER correlate with human judgments as well as{---}or better than{---}a second human judgment does."
+}
+
+@inproceedings{chrf,
+    title = "chr{F}: character n-gram {F}-score for automatic {MT} evaluation",
+    author = "Popovic, Maja",
+    editor = "Bojar, Ondrej  and
+      Chatterjee, Rajan  and
+      Federmann, Christian  and
+      Haddow, Barry  and
+      Hokamp, Chris  and
+      Huck, Matthias  and
+      Logacheva, Varvara  and
+      Pecina, Pavel",
+    booktitle = "Proceedings of the Tenth Workshop on Statistical Machine Translation",
+    month = sep,
+    year = "2015",
+    address = "Lisbon, Portugal",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/W15-3049/",
+    doi = "10.18653/v1/W15-3049",
+    pages = "392--395"
+}
+
+@inproceedings{wer,
+    title = "Word Error Rate Estimation for Speech Recognition: e-{WER}",
+    author = "Ali, Ahmed  and
+      Renals, Steve",
+    editor = "Gurevych, Iryna  and
+      Miyao, Yusuke",
+    booktitle = "Proceedings of the 56th Annual Meeting of the Association for Computational Linguistics (Volume 2: Short Papers)",
+    month = jul,
+    year = "2018",
+    address = "Melbourne, Australia",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/P18-2004/",
+    doi = "10.18653/v1/P18-2004",
+    pages = "20--24",
+    abstract = "Measuring the performance of automatic speech recognition (ASR) systems requires manually transcribed data in order to compute the word error rate (WER), which is often time-consuming and expensive. In this paper, we propose a novel approach to estimate WER, or e-WER, which does not require a gold-standard transcription of the test set. Our e-WER framework uses a comprehensive set of features: ASR recognised text, character recognition results to complement recognition output, and internal decoder features. We report results for the two features; black-box and glass-box using unseen 24 Arabic broadcast programs. Our system achieves 16.9{\%} WER root mean squared error (RMSE) across 1,400 sentences. The estimated overall WER e-WER was 25.3{\%} for the three hours test set, while the actual WER was 28.5{\%}."
+}

@@ -568,3 +568,43 @@ A further, notable issue is the LLM's tendency to produce forms closer to Mycena
 Many translations retain clear Linear B reminiscences, most notably the persistent use of the digamma (\textgreek{ϝ}) and frequent Mycenaean case endings.
 I have largely set these aside when the sense was clear and the content was correctly interpreted.
 However, if classical Ancient Greek is to serve as a reliable support language for translation, the system will need better normalization toward Classical morphology and orthography (e.g., consistent suppression of \textgreek{ϝ} where appropriate and alignment with Classical inflectional endings).
+
+\subsection{Machine translation metrics} \label{sec:metrics}
+To quantitatively evaluate the LLM's translation performance, I computed several machine translation metrics comparing the LLM's output with my revised translations.
+The metrics used are:
+\begin{itemize}
+  \item \textbf{BLEU (Bilingual Evaluation Understudy)} \cite{bleu}: Measures modified n\mbox{-}gram precision between the system output and a reference, with a brevity penalty to discourage overly short translations. Scores typically range from 0 to 1; higher is better.
+  \item \textbf{METEOR (Metric for Evaluation of Translation with Explicit ORdering)} \cite{meteor}: Uses a precision-recall harmonic mean (with recall weighting), aligns words via stemming/synonyms, and applies a fragmentation penalty for disordered matches. Ranges from 0 to 1; higher is better.
+  \item \textbf{ROUGE (Recall-Oriented Understudy for Gisting Evaluation)} \cite{rouge}: A recall-oriented family measuring overlap with the reference. ROUGE-1 and ROUGE-2 target unigram and bigram overlap; ROUGE-L uses the longest common subsequence. Scores range from 0 to 1; higher is better.
+  \item \textbf{TER (Translation Edit Rate)} \cite{ter}: The number of edits (insertions, deletions, substitutions, and shifts) needed to transform the system output into the reference, normalized by reference length. $0$ is perfect; lower is better (and values can exceed 1 on very poor outputs).
+  \item \textbf{CHRF (Character F-score)} \cite{chrf}: Computes an F-score over character n-grams, capturing fine-grained matches and being robust to inflectional variation. Ranges from 0 to 1; higher is better.
+  \item \textbf{WER (Word Error Rate)} \cite{wer}: Word-level edit rate $(S{+}D{+}I)/N$ (substitutions, deletions, insertions over reference length). $0$ is perfect; lower is better (and values can exceed 1 on very poor outputs).
+\end{itemize}
+
+\subsubsection{Results}
+Table \ref{tab:metrics-combined} reports the averaged evaluation scores across all 12 documents, 
+for both Ancient Greek and English translations. 
+
+\begin{table}[H]
+\centering
+\caption{Evaluation metrics for Ancient Greek and English translations (averaged over 12 documents).}
+\label{tab:metrics-combined}
+\begin{tabular}{|l|c|c|}
+\hline
+Metric & Greek & English \\
+\hline
+BLEU        & 0.641 & 0.768 \\
+METEOR      & 0.813 & 0.880 \\
+ROUGE-1 F1  & 0.818 & 0.903 \\
+ROUGE-2 F1  & 0.698 & 0.837 \\
+ROUGE-L F1  & 0.815 & 0.899 \\
+TER         & 0.187 & 0.158 \\
+CHRF        & 0.836 & 0.848 \\
+WER         & 0.189 & 0.161 \\
+\hline
+\end{tabular}
+\end{table}
+
+Overall, the LLM's translations are quite accurate, with English outperforming Greek across all metrics.
+The BLEU scores of 0.641 for Greek and 0.768 for English, however, derive from the LLM's tendency to retain Mycenaean features, which I have not even fully corrected in my revised translations.
+However, these reconstructions are still quite close to the Ancient Greek forms, as reflected in the high CHRF scores (0.836 for Greek and 0.848 for English), which capture character-level matches and are more robust to inflectional variations.
