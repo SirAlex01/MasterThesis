@@ -582,8 +582,7 @@ The metrics used are:
 \end{itemize}
 
 \subsubsection{Results}
-Table \ref{tab:metrics-combined} reports the averaged evaluation scores across all 12 documents, 
-for both Ancient Greek and English translations. 
+Table \ref{tab:metrics-combined} reports the averaged evaluation scores across all 12 documents for both Ancient Greek and English translations.
 
 \begin{table}[H]
 \centering
@@ -605,6 +604,6 @@ WER         & 0.189 & 0.161 \\
 \end{tabular}
 \end{table}
 
-Overall, the LLM's translations are quite accurate, with English outperforming Greek across all metrics.
-The BLEU scores of 0.641 for Greek and 0.768 for English, however, derive from the LLM's tendency to retain Mycenaean features, which I have not even fully corrected in my revised translations.
-However, these reconstructions are still quite close to the Ancient Greek forms, as reflected in the high CHRF scores (0.836 for Greek and 0.848 for English), which capture character-level matches and are more robust to inflectional variations.
+Overall, the LLM's outputs are strong, with English consistently outperforming Greek across metrics. BLEU is lower for Greek (0.641) largely because the model preserves Mycenaean features and non-classical endings; even my revised references do not fully normalize these.
+By contrast, high METEOR and ROUGE (e.g., ROUGE-L F1 of 0.815/0.899) indicate good lexical alignment and sequence coherence, and the low edit rates (TER 0.187/0.158; WER 0.189/0.161) suggest only modest post-editing is needed to reach the references.
+The high CHRF scores (0.836/0.848) further show close character-level similarity, which is robust to inflectional variation and minor orthographic drift.
