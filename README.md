@@ -15,36 +15,36 @@ This project investigates whether large language models can reliably translate L
 | Artifact | Path | Notes |
 |---|---|---|
 | Thesis (PDF) | [`thesis.pdf`](./thesis.pdf) | Full write-up of the project |
-| Translation outputs | [`code/translation_answers.csv`](./code/translation_answers.csv) | LLM + pipeline translations (Greek/English) |
-| Cognate dataset (final) | [`code/cognates_final.cog`](./code/cognates_final.cog) | Aggregated cognate matches used by the pipeline |
-| Luo original cognates | [`code/transliterated_linear_b-greek_original.cog`](./code/transliterated_linear_b-greek_original.cog) | Original resource from Luo (baseline) |
-| Brute-force cognates (script) | [`code/brute_cognates_dataset.py`](./code/brute_cognates_dataset.py) | Exhaustive search procedure |
-| Aux classifier dataset (CSV) | [`code/classifiers_dataset.csv`](./code/classifiers_dataset.csv) | Labels for part of speech / noun type / inflection |
-| Aux classifier dataset (script) | [`code/classifiers_dataset.py`](./code/classifiers_dataset.py) | Generates the auxiliary dataset |
-| Linear B lexicon (Ventris–Chadwick notes) | [`code/Linear B Lexicon.csv`](<./code/Linear%20B%20Lexicon.csv>) | Reference lexicon |
-| LB signs standardizer | [`code/LB_signs_standardizer.py`](./code/LB_signs_standardizer.py) | Normalizes Linear B signs |
-| LB web-scraper (docs) | [`code/LB-webscrape-documents.py`](./code/LB-webscrape-documents.py) | Collects Linear B texts |
-| LA web-scraper (docs) | [`code/LA-webscrape-documents.py`](./code/LA-webscrape-documents.py) | Collects Linear A texts |
-| LA web-scraper (sites) | [`code/LA_webscrape_sites.py`](./code/LA_webscrape_sites.py) | Collects site-level info |
-| LIBER documents (LB) | [`code/LIBER_documents.csv`](./code/LIBER_documents.csv) | LB document metadata |
-| Sequences — Linear B | [`code/sequences_LB.csv`](./code/sequences_LB.csv) | Sequence-level LB data |
-| Sequences — Linear A | [`code/sequences.csv`](./code/sequences.csv) | Sequence-level LA data |
-| Signs — Linear B | [`code/signs_LB.csv`](./code/signs_LB.csv) | Sign-level LB data |
-| Signs — Linear A | [`code/signs.csv`](./code/signs.csv) | Sign-level LA data |
-| Sites — Linear A | [`code/sites_data.csv`](./code/sites_data.csv) | LA document-level info |
-| Notebook (end-to-end) | [`code/LALB_notebook.ipynb`](./code/LALB_notebook.ipynb) | Cognate model, classifiers, pipeline, MT metrics |
-| Luo metrics extractor | [`code/luo_metrics_extractor`](./code/luo_metrics_extractor) | Tools to parse Luo logs/plots |
-| Odyssey text (scraped) | [`code/gr_eng_text.csv`](./code/gr_eng_text.csv) | Odyssey text |
-| Iliad text (scraped) | [`code/ILIADKEY.csv`](./code/ILIADKEY.csv) | Iliad text |
-| Latinized Homeric lexicon | [`code/latinized_homeric_greek_words.tsv`](./code/latinized_homeric_greek_words.tsv) | Preprocessed Homer data for cognates extraction |
-| Additional lexicon scripts | [`code/additional_lexicon`](./code/additional_lexicon) | Tselentis' lexicon extraction helpers |
+| Translation outputs | [`code/translation_answers.csv`](https://github.com/SirAlex01/LALB-DM-Project/tree/097d7a40728104790f3d2be6beaf02133a90ac16/translation_answers.csv) | LLM + pipeline translations (Greek/English) |
+| Cognate dataset (final) | [`code/cognates_final.cog`](https://github.com/SirAlex01/LALB-DM-Project/tree/097d7a40728104790f3d2be6beaf02133a90ac16/cognates_final.cog) | Aggregated cognate matches used by the pipeline |
+| Luo original cognates | [`code/transliterated_linear_b-greek_original.cog`](https://github.com/SirAlex01/LALB-DM-Project/tree/097d7a40728104790f3d2be6beaf02133a90ac16/transliterated_linear_b-greek_original.cog) | Original resource from Luo (baseline) |
+| Brute-force cognates (script) | [`code/brute_cognates_dataset.py`](https://github.com/SirAlex01/LALB-DM-Project/tree/097d7a40728104790f3d2be6beaf02133a90ac16/brute_cognates_dataset.py) | Exhaustive search procedure |
+| Aux classifier dataset (CSV) | [`code/classifiers_dataset.csv`](https://github.com/SirAlex01/LALB-DM-Project/tree/097d7a40728104790f3d2be6beaf02133a90ac16/classifiers_dataset.csv) | Labels for part of speech / noun type / inflection |
+| Aux classifier dataset (script) | [`code/classifiers_dataset.py`](https://github.com/SirAlex01/LALB-DM-Project/tree/097d7a40728104790f3d2be6beaf02133a90ac16/classifiers_dataset.py) | Generates the auxiliary dataset |
+| Linear B lexicon (Ventris–Chadwick notes) | [`code/Linear B Lexicon.csv`](<https://github.com/SirAlex01/LALB-DM-Project/tree/097d7a40728104790f3d2be6beaf02133a90ac16/Linear%20B%20Lexicon.csv>) | Reference lexicon |
+| LB signs standardizer | [`code/LB_signs_standardizer.py`](https://github.com/SirAlex01/LALB-DM-Project/tree/097d7a40728104790f3d2be6beaf02133a90ac16/LB_signs_standardizer.py) | Normalizes Linear B signs |
+| LB web-scraper (docs) | [`code/LB-webscrape-documents.py`](https://github.com/SirAlex01/LALB-DM-Project/tree/097d7a40728104790f3d2be6beaf02133a90ac16/LB-webscrape-documents.py) | Collects Linear B texts |
+| LA web-scraper (docs) | [`code/LA-webscrape-documents.py`](https://github.com/SirAlex01/LALB-DM-Project/tree/097d7a40728104790f3d2be6beaf02133a90ac16/LA-webscrape-documents.py) | Collects Linear A texts |
+| LA web-scraper (sites) | [`code/LA_webscrape_sites.py`](https://github.com/SirAlex01/LALB-DM-Project/tree/097d7a40728104790f3d2be6beaf02133a90ac16/LA_webscrape_sites.py) | Collects site-level info |
+| LIBER documents (LB) | [`code/LIBER_documents.csv`](https://github.com/SirAlex01/LALB-DM-Project/tree/097d7a40728104790f3d2be6beaf02133a90ac16/LIBER_documents.csv) | LB document metadata |
+| Sequences — Linear B | [`code/sequences_LB.csv`](https://github.com/SirAlex01/LALB-DM-Project/tree/097d7a40728104790f3d2be6beaf02133a90ac16/sequences_LB.csv) | Sequence-level LB data |
+| Sequences — Linear A | [`code/sequences.csv`](https://github.com/SirAlex01/LALB-DM-Project/tree/097d7a40728104790f3d2be6beaf02133a90ac16/sequences.csv) | Sequence-level LA data |
+| Signs — Linear B | [`code/signs_LB.csv`](https://github.com/SirAlex01/LALB-DM-Project/tree/097d7a40728104790f3d2be6beaf02133a90ac16/signs_LB.csv) | Sign-level LB data |
+| Signs — Linear A | [`code/signs.csv`](https://github.com/SirAlex01/LALB-DM-Project/tree/097d7a40728104790f3d2be6beaf02133a90ac16/signs.csv) | Sign-level LA data |
+| Sites — Linear A | [`code/sites_data.csv`](https://github.com/SirAlex01/LALB-DM-Project/tree/097d7a40728104790f3d2be6beaf02133a90ac16/sites_data.csv) | LA document-level info |
+| Notebook (end-to-end) | [`code/LALB_notebook.ipynb`](https://github.com/SirAlex01/LALB-DM-Project/tree/097d7a40728104790f3d2be6beaf02133a90ac16/LALB_notebook.ipynb) | Cognate model, classifiers, pipeline, MT metrics |
+| Luo metrics extractor | [`code/luo_metrics_extractor`](https://github.com/SirAlex01/LALB-DM-Project/tree/097d7a40728104790f3d2be6beaf02133a90ac16/luo_metrics_extractor) | Tools to parse Luo logs/plots |
+| Odyssey text (scraped) | [`code/gr_eng_text.csv`](https://github.com/SirAlex01/LALB-DM-Project/tree/097d7a40728104790f3d2be6beaf02133a90ac16/gr_eng_text.csv) | Odyssey text |
+| Iliad text (scraped) | [`code/ILIADKEY.csv`](https://github.com/SirAlex01/LALB-DM-Project/tree/097d7a40728104790f3d2be6beaf02133a90ac16/ILIADKEY.csv) | Iliad text |
+| Latinized Homeric lexicon | [`code/latinized_homeric_greek_words.tsv`](https://github.com/SirAlex01/LALB-DM-Project/tree/097d7a40728104790f3d2be6beaf02133a90ac16/latinized_homeric_greek_words.tsv) | Preprocessed Homer data for cognates extraction |
+| Additional lexicon scripts | [`code/additional_lexicon`](https://github.com/SirAlex01/LALB-DM-Project/tree/097d7a40728104790f3d2be6beaf02133a90ac16/additional_lexicon) | Tselentis' lexicon extraction helpers |
 
 ---
 
 ## ✅ Results
 
 - **Thesis PDF:** [`thesis.pdf`](./thesis.pdf)  
-- **Translation outputs (CSV):** [`code/translation_answers.csv`](./code/translation_answers.csv)  
+- **Translation outputs (CSV):** [`code/translation_answers.csv`](https://github.com/SirAlex01/LALB-DM-Project/tree/097d7a40728104790f3d2be6beaf02133a90ac16/translation_answers.csv)  
 
 [comment]: <> (- **Presentation**: [`presentation.pdf`] etc.)
 
