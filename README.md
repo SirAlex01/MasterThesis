@@ -1,6 +1,5 @@
-# Linear B → Ancient Greek and English: translation with LLMs
-
-> Code and data for my thesis on translating Linear B administrative tablets into Ancient Greek (and English) using a hybrid pipeline that combines cognate matching, auxiliary classifiers, logogram handling, and an LLMs (Gemini 2.5 Flash) through prompt engineering.
+# An AI Framework for Linear B Translation into Ancient Greek and English
+> Code and data for my Master's thesis on translating Linear B administrative tablets into Ancient Greek (and English) using a hybrid pipeline that combines cognate matching, auxiliary classifiers, logogram handling, and an LLMs (Gemini 2.5 Flash) through prompt engineering.
 
 ## 📄 Abstract
 
