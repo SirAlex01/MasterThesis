@@ -4,10 +4,10 @@
 ## 📄 Abstract
 
 This thesis tests whether large language models (LLMs) can assist in translating Linear B administrative texts into Ancient Greek and English.
-I have built a compact \emph{Translation Pipeline} that couples brute-force cognate search with candidate aggregation, Linear-SVM auxiliary classifiers (part of speech, noun type, inflection), explicit handling of logograms/abbreviations, and structured multi-message prompting. Alongside the engineering, the thesis surveys the Aegean scripts (historical context, sites, linguistic features, and the decipherment of Linear B), details data collection (Linear A fragments, Linear B documents, Ancient Greek resources), and situates the approach within prior work on cognate matching and manual decipherment.
+I have built a compact Translation Pipeline that couples brute-force cognate search with candidate aggregation, Linear-SVM auxiliary classifiers (part of speech, noun type, inflection), explicit handling of logograms/abbreviations, and structured multi-message prompting. Alongside the engineering, the thesis surveys the Aegean scripts (historical context, sites, linguistic features, and the decipherment of Linear B), details data collection (Linear A fragments, Linear B documents, Ancient Greek resources), and situates the approach within prior work on cognate matching and manual decipherment.
 
-For cognates, I employed the generative \emph{NeuroDecipher} framework from Jiaming Luo and a brute-force extraction pass; for disambiguation, I have added auxiliary labels and table-driven guidance.
-Using Gemini~2.5~Flash, the system reconstructs plausible Ancient Greek forms and produces English translations for full tablets.
+For cognates, I employed the generative NeuroDecipher framework from Jiaming Luo and a brute-force extraction pass; for disambiguation, I have added auxiliary labels and table-driven guidance.
+Using Gemini 2.5 Flash, the system reconstructs plausible Ancient Greek forms and produces English translations for full tablets.
 Evaluation against translations from Tselentis' lexicon shows that automated translation is feasible: list-like inventories and administrative formulae are consistently recovered, vocabulary stays domain-appropriate, and English readings preserve the intended sense. An error taxonomy emerges: (i) weak/misleading cognates, (ii) case/number misassignment in context-poor lines, (iii) grammatical function errors from misclassification, and (iv) occasional logogram mishandling.
 Greek reconstructions sometimes retain Mycenaean features, but these rarely obscure meaning.
 
